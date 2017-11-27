@@ -1,0 +1,6 @@
+pip==9.0.1
+setuptools==38.1.0
+wheel==0.30.0
+Django==1.11.7
+requests==2.18.4
+psycopg2==2.7.3.2
