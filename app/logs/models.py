@@ -9,26 +9,27 @@ class SpiderLog(models.Model):
     爬虫异常
     """
     SOURCE_CHOICE = (
-        ("bilibili_season", "BilibiliSeason"),
+        ("0", "BilibiliSeason"),
     )
     STATUS_CHOICE = (
+        ("-1", "url不存在"),
         ("0", "爬取失败"),
-        ("1", "json异常"),
-        ("2", "字段异常"),
-        ("3", "存储成功"),
+        ("1", "存储成功"),
+        ("2", "数据异常"),
+        ("3", "字段异常"),
+        ("4", "other"),
     )
-    source = models.CharField(max_length=255, choices=SOURCE_CHOICE)
-    url = models.CharField(max_length=255)
-    proxy_host = models.CharField(max_length=255)
-    status = models.CharField(max_length=255, choices=STATUS_CHOICE)
-    times = models.IntegerField()
-    logs = JSONField()
+    source = models.CharField(max_length=10, choices=SOURCE_CHOICE)
+    source_id = models.IntegerField()
+    url = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
+    logs = JSONField()  # time, proxy, response, http code, status
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        pass
+        unique_together = ("source", "source_id")
 
     def __str__(self):
         return self.url

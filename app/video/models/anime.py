@@ -9,13 +9,14 @@ class BilibiliSeason(models.Model):
     b站番剧
     """
     season_id = models.IntegerField(unique=True)
-    season_name = models.CharField(max_length=255)
+    season_name = models.CharField(max_length=100)
     bangumi_id = models.IntegerField(db_index=True)
-    bangumi_name = models.CharField(max_length=255)
+    bangumi_name = models.CharField(max_length=100)
 
-    season_url = models.URLField()
+    season_url = models.TextField()
     play_count = models.BigIntegerField()
-    detail = JSONField()
+    detail = JSONField()  # data, time, dict+list
+    status = models.BooleanField(default=False, db_index=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
