@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 
 class SpiderLog(models.Model):
     """
-    爬虫异常
+    爬虫记录
     """
     SOURCE_CHOICE = (
         ("0", "BilibiliSeason"),
@@ -19,6 +19,7 @@ class SpiderLog(models.Model):
         ("3", "字段异常"),
         ("4", "other"),
     )
+    user_log_id = models.IntegerField()
     source = models.CharField(max_length=10, choices=SOURCE_CHOICE)
     source_id = models.IntegerField()
     url = models.TextField()
@@ -29,10 +30,41 @@ class SpiderLog(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ("source", "source_id")
+        pass
 
     def __str__(self):
         return self.url
+
+    def add_log(self):
+        pass
+
+
+class UserLog(models.Model):
+    """
+    操作记录
+    """
+    STATUS_CHOICE = (
+        ("0", "失败"),
+        ("1", "进行中"),
+        ("2", "完成"),
+        ("3", "取消中"),
+        ("4", "已取消"),
+    )
+    user_id = models.IntegerField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
+    logs = JSONField()
+
+    count = models.IntegerField()
+    success = models.IntegerField()
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return self.user
 
     def add_log(self):
         pass
