@@ -64,7 +64,7 @@ class UserLog(models.Model):
         pass
 
     def __str__(self):
-        return self.user
+        return self.user_id
 
     def add_log(self):
         pass
