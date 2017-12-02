@@ -50,9 +50,13 @@ class UserLog(models.Model):
         ("3", "取消中"),
         ("4", "已取消"),
     )
+    TYPE_CHOICE = (
+        ("0", "BilibiliSeason Spider"),
+    )
     user_id = models.IntegerField()
+    log_type = models.CharField(max_length=10, choices=TYPE_CHOICE, db_index=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
-    logs = JSONField()
+    logs = JSONField()  # time, start, end, spend, discription
 
     count = models.IntegerField()
     success = models.IntegerField()
@@ -64,7 +68,7 @@ class UserLog(models.Model):
         pass
 
     def __str__(self):
-        return self.user_id
+        return self.log_type
 
     def add_log(self):
         pass
