@@ -98,10 +98,12 @@ def main():
         print(del_project("wdata"))
     else:
         print("daemonstatus: ", get_daemonstatus())
-        print("projects: ", list_projects())
+        projects = list_projects()
+        print("projects: ", projects)
         print("project wdata versions: ", list_versions("wdata"))
-        print("project wdata spiders: ", list_spiders("wdata"))
-        print("project wdata jobs: ", list_jobs("wdata"))
+        if projects.get("status", "") == "ok" and projects.get("projects", []):
+            print("project wdata spiders: ", list_spiders("wdata"))
+            print("project wdata jobs: ", list_jobs("wdata"))
 
 
 if __name__ == "__main__":

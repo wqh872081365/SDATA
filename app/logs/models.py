@@ -24,7 +24,7 @@ class SpiderLog(models.Model):
     source_id = models.IntegerField()
     url = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
-    logs = JSONField()  # time, proxy, response, http code, status
+    logs = JSONField()  # time, proxy, response, http code, status, start time, end time,
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
