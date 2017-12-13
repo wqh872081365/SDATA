@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 # Scrapy settings for wdata project
 #
 # For simplicity, this file contains only settings considered important or
@@ -53,7 +55,9 @@ COOKIES_ENABLED = True
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'wdata.middlewares.MyCustomDownloaderMiddleware': 543,
+    # 'wdata.middlewares.MyCustomDownloaderMiddleware': 543,
+    'wdata.downloadermiddleware.UserAgentMiddleware': 543,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
 }
 
 # Enable or disable extensions
@@ -64,9 +68,10 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'wdata.pipelines.WdataPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   # 'wdata.pipelines.WdataPipeline': 300,
+    "wdata.pipelines.PostgresPipeline": 300
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -91,6 +96,13 @@ DOWNLOADER_MIDDLEWARES = {
 
 # django
 
+# log
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+LOG_ENABLED = True
+LOG_FILE = os.path.join(BASE_DIR, "logs", "scrapy.log")
+LOG_LEVEL = "DEBUG"
+LOG_STDOUT = True
 
 try:
     from wdata.local_settings import *

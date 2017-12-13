@@ -8,6 +8,8 @@
 import scrapy
 from scrapy_djangoitem import DjangoItem
 from app.video.models import BilibiliSeason
+from app.proxy.models import Proxy
+from app.logs.models import SpiderLog
 
 
 class WdataItem(scrapy.Item):
@@ -18,3 +20,11 @@ class WdataItem(scrapy.Item):
 
 class BilibiliSeasonItem(DjangoItem):
     django_model = BilibiliSeason
+
+
+class ProxyItem(DjangoItem):
+    django_model = Proxy
+
+
+class SpiderLogItem(DjangoItem):
+    django_model = SpiderLog
