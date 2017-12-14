@@ -35,7 +35,6 @@ class Proxy(models.Model):
     country = models.CharField(max_length=100)
     http = models.CharField(max_length=10, choices=HTTP_CHOICE, db_index=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
-    invalid_time = models.DateTimeField(default=datetime.datetime.max)
 
     detail = JSONField()  # time, detail, source
 

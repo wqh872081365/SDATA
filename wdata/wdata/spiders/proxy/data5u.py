@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from django.utils import timezone
+
 import scrapy
+
 from wdata.items import ProxyItem
 
 ANONYMITY_DICT = {
@@ -87,28 +90,41 @@ class data5uSpider(scrapy.Spider):
                 try:
                     ip = ip[0].strip()
                     port = int(port[0].strip())
-                    anonymity = [anony.strip() for anony in anonymity]
-                    country = country[0].strip()
-                    http = [ht.strip() for ht in http]
-                    city = [ci.strip() for ci in city]
-                    isp = isp[0].strip()
-                    delay = delay[0].strip()
-                    verify_time = verify_time[0].strip()
+                    anonymity = [_anonymity.strip() for _anonymity in anonymity]
+                    country = [_country.strip() for _country in country]
+                    http = [_http.strip() for _http in http]
+                    city = [_city.strip() for _city in city]
+                    isp = [_isp.strip() for _isp in isp]
+                    delay = [_delay.strip() for _delay in delay]
+                    verify_time = [_verify_time.strip() for _verify_time in verify_time]
 
                     proxy = ProxyItem()
                     proxy["ip"] = ip
                     proxy["port"] = port
-                    proxy["anonymity"] = ANONYMITY_DICT.get(anonymity[0], "-1")
-                    proxy["country"] = country
-                    proxy["http"] = "1" if "https" in http else HTTP_DICT.get(http[0], "-1")
+                    if anonymity:
+                        proxy["anonymity"] = ANONYMITY_DICT.get(anonymity[0], "-1")
+                    else:
+                        proxy["anonymity"] = "-1"
+                    if country:
+                        proxy["country"] = country[0]
+                    else:
+                        proxy["country"] = ""
+                    if http:
+                        proxy["http"] = "1" if "https" in http else HTTP_DICT.get(http[0], "-1")
+                    else:
+                        proxy["http"] = "-1"
                     proxy["detail"] = {
                         "anonymity": " ".join(anonymity),
+                        "country": " ".join(country),
                         "http": " ".join(http),
                         "city": " ".join(city),
-                        "isp": isp,
-                        "delay": delay,
-                        "verify_time": verify_time
+                        "isp": " ".join(isp),
+                        "delay": " ".join(delay),
+                        "verify_time": " ".join(verify_time),
+                        "source": "data5u",
+                        "update_time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
                     }
+                    print(proxy)
                     yield proxy
                 except Exception as e:
                     print(e)

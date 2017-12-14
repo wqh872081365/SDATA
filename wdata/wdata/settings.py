@@ -96,9 +96,18 @@ ITEM_PIPELINES = {
 
 # django
 
-# log
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import sys
+sys.path.append(BASE_DIR)
+
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'SDATA.settings'
+
+import django
+django.setup()
+
+# log
 LOG_ENABLED = True
 LOG_FILE = os.path.join(BASE_DIR, "logs", "scrapy.log")
 LOG_LEVEL = "DEBUG"
