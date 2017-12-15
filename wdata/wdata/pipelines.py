@@ -23,7 +23,6 @@ class PostgresPipeline(object):
         if type(item) == ProxyItem:
             ip = item["ip"]
             port = item["port"]
-            country = item["country"][:100]
             try:
                 validate_ipv46_address(ip)
                 if Proxy.objects.filter(ip=ip, port=port):
@@ -32,6 +31,7 @@ class PostgresPipeline(object):
                     proxy.modified = timezone.now()
                     proxy.save()
                 else:
+                    country = item["country"][:100]
                     Proxy.objects.create(ip=ip, port=port, source="data5u", anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0, created=timezone.now(), modified=timezone.now())
             except Exception as e:
                 print(e)

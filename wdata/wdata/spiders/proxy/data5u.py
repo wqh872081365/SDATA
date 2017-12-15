@@ -75,7 +75,7 @@ class data5uSpider(scrapy.Spider):
         sel_list = response.xpath("//ul[@class='l2']")
         for sel in sel_list:
             ip = sel.xpath("span[1]/li/text()").extract()
-            port = sel.xpath("span[2]/li/text()").extract()
+            port = sel.xpath("span[2]/li/@class").extract()
             anonymity = sel.xpath("span[3]/li/a/text()").extract()
             http = sel.xpath("span[4]/li/a/text()").extract()
             country = sel.xpath("span[5]/li/a/text()").extract()
@@ -89,7 +89,7 @@ class data5uSpider(scrapy.Spider):
             if ip and port:
                 try:
                     ip = ip[0].strip()
-                    port = int(port[0].strip())
+                    port = int("".join([str("ABCDEFGHIZ".index(_port)) for _port in port[0].strip().split(" ")[1]])) >> 3
                     anonymity = [_anonymity.strip() for _anonymity in anonymity]
                     country = [_country.strip() for _country in country]
                     http = [_http.strip() for _http in http]
