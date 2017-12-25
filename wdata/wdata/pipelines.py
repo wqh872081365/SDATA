@@ -28,11 +28,11 @@ class PostgresPipeline(object):
                 if Proxy.objects.filter(ip=ip, port=port):
                     proxy = Proxy.objects.get(ip=ip, port=port)
                     proxy.detail["details"].append(item["detail"])
-                    proxy.modified = timezone.now()
+                    # proxy.modified = timezone.now()
                     proxy.save()
                 else:
                     country = item["country"][:100]
-                    Proxy.objects.create(ip=ip, port=port, source="data5u", anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0, created=timezone.now(), modified=timezone.now())
+                    Proxy.objects.create(ip=ip, port=port, source="data5u", anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
             except Exception as e:
                 print(e)
         return item

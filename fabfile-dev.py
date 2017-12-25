@@ -26,3 +26,7 @@ def show_scrapyd_status():
 
 def delete_scrapyd_project():
     local(env_path + "/bin/python3.6 " + code_path + "/app/utils/scrapy.py" + " del_project")
+
+
+def add_scrapyd_schedule(spider):
+    local(env_path + "/bin/python3.6 " + code_path + "/app/utils/scrapy.py" + " add_schedule " + spider)

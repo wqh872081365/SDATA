@@ -19,7 +19,7 @@ DELVERSION_URL = ROOT_URL + "delversion.json"
 DELPROJECT_URL = ROOT_URL + "delproject.json"
 
 JOB_DICT = {
-
+    "data5u": "data5u"
 }
 
 PROJECT_DICT = {
@@ -94,14 +94,19 @@ def del_old_versions():
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == "del_project":
-        print(del_project("wdata"))
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "del_project":
+            print(del_project("wdata"))
+        elif sys.argv[1] == "add_schedule" and len(sys.argv) == 3 and JOB_DICT.get(sys.argv[2]):
+            print(add_schedule("wdata", sys.argv[2], JOB_DICT[sys.argv[2]]))
+        else:
+            print("fab error")
     else:
         print("daemonstatus: ", get_daemonstatus())
         projects = list_projects()
         print("projects: ", projects)
         print("project wdata versions: ", list_versions("wdata"))
-        if projects.get("status", "") == "ok" and projects.get("projects", []):
+        if projects.get("status", "") == "ok" and "wdata" in projects.get("projects", []):
             print("project wdata spiders: ", list_spiders("wdata"))
             print("project wdata jobs: ", list_jobs("wdata"))
 

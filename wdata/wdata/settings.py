@@ -109,9 +109,9 @@ django.setup()
 
 # log
 LOG_ENABLED = True
-LOG_FILE = os.path.join(BASE_DIR, "logs", "scrapy.log")
+LOG_FILE = "/home/wqh/wangqihui/work/SDATA/wdata/logs/scrapy.log"
 LOG_LEVEL = "DEBUG"
-LOG_STDOUT = True
+LOG_STDOUT = False
 
 try:
     from wdata.local_settings import *

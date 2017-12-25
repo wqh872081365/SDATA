@@ -15,7 +15,7 @@ class BilibiliSeason(models.Model):
 
     season_url = models.TextField()
     play_count = models.BigIntegerField()
-    detail = JSONField()  # data, time, dict+list
+    detail = JSONField()  # data, time, dict+list, log id
     status = models.BooleanField(default=False, db_index=True)
 
     created = models.DateTimeField(auto_now_add=True)

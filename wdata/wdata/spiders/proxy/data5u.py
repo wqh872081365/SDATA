@@ -129,4 +129,3 @@ class data5uSpider(scrapy.Spider):
                 except Exception as e:
                     print(e)
                     continue
-            break
