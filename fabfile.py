@@ -11,13 +11,15 @@ env.roledefs['apps'] = [
 @parallel
 @roles('apps')
 def start_scrapyd():
-    run(env_path + "/bin/scrapyd")
+    with cd(code_path + "/wdata"):
+        run(env_path + "/bin/scrapyd")
 
 
 @parallel
 @roles('apps')
 def pip_upgrade():
-    run(env_path + "/bin/pip3.6 install -r requirements.txt")
+    with cd(code_path):
+        run(env_path + "/bin/pip3.6 install -r requirements.txt")
 
 
 @parallel
@@ -43,4 +45,10 @@ def show_scrapyd_status():
 @parallel
 @roles('apps')
 def delete_scrapyd_project():
-    local(env_path + "/bin/python3.6 " + code_path + "/app/utils/scrapy.py" + " del_project")
+    run(env_path + "/bin/python3.6 " + code_path + "/app/utils/scrapy.py" + " del_project")
+
+
+@parallel
+@roles('apps')
+def add_scrapyd_schedule(spider):
+    run(env_path + "/bin/python3.6 " + code_path + "/app/utils/scrapy.py" + " add_schedule " + spider)

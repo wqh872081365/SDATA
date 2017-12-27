@@ -35,7 +35,7 @@ class SpiderLog(models.Model):
     def __str__(self):
         return self.url
 
-    def add_log(self):
+    def add_log(self, detail):
         pass
 
 
