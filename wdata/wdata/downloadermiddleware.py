@@ -44,6 +44,9 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
             index += 1
             if r.status_code == 200:
                 break
+            else:
+                proxy.status = "0"
+                proxy.save()
             if index > 10:
                 proxy_site = random.choice(PROXY_LIST)
                 add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))

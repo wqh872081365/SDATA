@@ -19,3 +19,7 @@ def add_user_log(type, count, discription, status="5", user_id=1):
     log = UserLog(user_id=user_id, log_type=type, status=status, logs=logs, count=count, success=0)
     log.save()
     return log
+
+
+def clean_log():
+    pass
