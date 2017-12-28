@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.utils import timezone
 
 # Create your models here.
 
@@ -35,8 +36,19 @@ class SpiderLog(models.Model):
     def __str__(self):
         return self.url
 
-    def add_log(self, detail):
-        pass
+    def add_msg(self, msg, response, type="fg_msg"):
+        log = {
+            "msg": msg,
+            "url": response.url,
+            "data": response.body,
+            "time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
+        }
+        if not isinstance(type, (str,)):
+            type = "fg_msg"
+        if self.logs.get(type) and isinstance(self.logs[type], (tuple, list)):
+            self.logs[type].append(log)
+        else:
+            self.logs[type] = [log,]
 
 
 class UserLog(models.Model):
@@ -49,6 +61,7 @@ class UserLog(models.Model):
         ("2", "完成"),
         ("3", "取消中"),
         ("4", "已取消"),
+        ("5", "未开始"),
     )
     TYPE_CHOICE = (
         ("0", "BilibiliSeason Spider"),
@@ -56,7 +69,7 @@ class UserLog(models.Model):
     user_id = models.IntegerField()
     log_type = models.CharField(max_length=10, choices=TYPE_CHOICE, db_index=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
-    logs = JSONField()  # time, start, end, spend, discription
+    logs = JSONField()  # time, start, end, spend, discription(list), type, msg
 
     count = models.IntegerField()
     success = models.IntegerField()
@@ -70,5 +83,19 @@ class UserLog(models.Model):
     def __str__(self):
         return self.log_type
 
-    def add_log(self):
-        pass
+    def add_msg(self, msg, response, type="fg_msg"):
+        log = {
+            "msg": msg,
+            "url": response.url,
+            "data": response.body,
+            "time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
+        }
+        if not isinstance(type, (str,)):
+            type = "fg_msg"
+        if self.logs.get(type) and isinstance(self.logs[type], (tuple, list)):
+            self.logs[type].append(log)
+        else:
+            self.logs[type] = [log,]
+
+    def add_end(self):
+        self.logs["end_time"] = timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
