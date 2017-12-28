@@ -57,7 +57,9 @@ COOKIES_ENABLED = True
 DOWNLOADER_MIDDLEWARES = {
     # 'wdata.middlewares.MyCustomDownloaderMiddleware': 543,
     'wdata.downloadermiddleware.UserAgentMiddleware': 543,
+    'wdata.downloadermiddleware.RandomHttpProxyMiddleware': 543,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
 
 # Enable or disable extensions

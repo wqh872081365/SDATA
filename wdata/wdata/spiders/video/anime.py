@@ -7,7 +7,6 @@ import json
 import traceback
 
 from wdata.items import BilibiliSeasonItem
-from app.logs.models import SpiderLog
 from app.logs.add_log import add_spider_log, add_user_log
 
 BASE_URL = "https://bangumi.bilibili.com/web_api/season/index_global"
@@ -57,7 +56,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 self.user_log.status = "1"
                                 print(len(season_list), discription)
                                 for season_id in discription:
-                                    yield scrapy.Request(url=season_url % (season_id,), callback=self.parse, headers=HEADERS)
+                                    yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
                             else:
                                 self.user_log.add_msg(msg="no season_id", response=response)
                         else:
@@ -126,7 +125,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                     self.user_log.status = "1"
                                 print(len(season_list), discription)
                                 for season_id in discription:
-                                    yield scrapy.Request(url=season_url % (season_id,), callback=self.parse, headers=HEADERS)
+                                    yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
                             else:
                                 self.user_log.add_msg(msg="no season_id", response=response)
                         else:
@@ -148,7 +147,6 @@ class BilibiliSeasonSpider(scrapy.Spider):
         _season_id = re.match(r'^https://bangumi.bilibili.com/jsonp/seasoninfo/(\d*).ver$', response.url).groups()
         if _season_id:
             source_id = int(_season_id[0])
-            SpiderLog.objects.get()
             spider_log = add_spider_log(user_log_id=self.user_log.id, source="0", source_id=source_id, url=response.url)
             try:
                 if response.status == 200:
@@ -181,6 +179,9 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 self.user_log.status = "2"
                                 self.user_log.add_end()
                             self.user_log.save()
+
+                            spider_log.status = "1"
+
                             print(season)
                             yield season
                         else:

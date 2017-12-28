@@ -1,7 +1,12 @@
 """Set User-Agent header per spider or use a default value from settings"""
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
 import random
+import requests
+
+from app.proxy.helper import get_random_proxy
+from app.utils.scrapy import add_schedule, PROXY_LIST, JOB_DICT
 
 USER_AGENT_LIST = [
     "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
@@ -26,3 +31,24 @@ class UserAgentMiddleware(object):
     def process_request(self, request, spider):
         if self.user_agent:
             request.headers.setdefault(b'User-Agent', self.user_agent)
+
+
+class RandomHttpProxyMiddleware(HttpProxyMiddleware):
+
+    def _set_proxy(self, request, scheme):
+        creds, _ = self.proxies[scheme]
+        index = 0
+        while 1:
+            proxy = get_random_proxy(anonymity="2", country="中国", http=scheme, status="1")
+            r = requests.get("http://127.0.0.1:6800", proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)})
+            index += 1
+            if r.status_code == 200:
+                break
+            if index > 10:
+                proxy_site = random.choice(PROXY_LIST)
+                add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))
+            elif index > 100:
+                raise("too much imvalid proxy")
+        request.meta['proxy'] = "%s://%s:%s" % (scheme, proxy.ip, proxy.port)
+        if creds:
+            request.headers['Proxy-Authorization'] = b'Basic ' + creds
