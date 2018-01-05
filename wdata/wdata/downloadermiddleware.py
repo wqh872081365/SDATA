@@ -13,6 +13,9 @@ USER_AGENT_LIST = [
     "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
 ]
 
+from app.proxy.helper import TEST_PROXY_URL
+
+
 class UserAgentMiddleware(object):
     """This middleware allows spiders to override the user_agent"""
 
@@ -39,8 +42,12 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
         creds, _ = self.proxies[scheme]
         index = 0
         while 1:
-            proxy = get_random_proxy(anonymity="2", country="中国", http=scheme, status="1")
-            r = requests.get("http://127.0.0.1:6800", proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)})
+            if scheme == "https":
+                proxy = get_random_proxy(anonymity="2", country="中国", http="1", status="1")
+                r = requests.get("https://" + TEST_PROXY_URL, proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)})
+            else:
+                proxy = get_random_proxy(anonymity="2", country="中国", http="0", status="1")
+                r = requests.get("http://" + TEST_PROXY_URL, proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)})
             index += 1
             if r.status_code == 200:
                 break
@@ -50,8 +57,8 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
             if index > 10:
                 proxy_site = random.choice(PROXY_LIST)
                 add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))
-            elif index > 100:
-                raise("too much imvalid proxy")
+            if index > 100:
+                raise("too much invalid proxy")
         request.meta['proxy'] = "%s://%s:%s" % (scheme, proxy.ip, proxy.port)
         if creds:
             request.headers['Proxy-Authorization'] = b'Basic ' + creds

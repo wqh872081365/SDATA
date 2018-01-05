@@ -36,20 +36,6 @@ class SpiderLog(models.Model):
     def __str__(self):
         return self.url
 
-    def add_msg(self, msg, response, type="fg_msg"):
-        log = {
-            "msg": msg,
-            "url": response.url,
-            "data": response.body,
-            "time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
-        }
-        if not isinstance(type, (str,)):
-            type = "fg_msg"
-        if self.logs.get(type) and isinstance(self.logs[type], (tuple, list)):
-            self.logs[type].append(log)
-        else:
-            self.logs[type] = [log,]
-
 
 class UserLog(models.Model):
     """
