@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from app.proxy.models import Proxy
+from wdata.wdata.downloadermiddleware import USER_AGENT_LIST
 
 import requests
 import time
@@ -11,17 +12,8 @@ TEST_PROXY_URL = {
     "http": "http://quotes.toscrape.com"
 }
 
-USER_AGENT_LIST = [
-    "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
-]
 
-
-def get_random_proxy(**kwargs):
-    return Proxy.objects.filter(**kwargs).order_by("?").first()
-
-
-def get_valid_proxy_number():
+def count_valid_proxy():
     proxy_http = Proxy.objects.filter(anonymity="2", country="中国", http="0", status__in=["1", "2"])
     proxy_https = Proxy.objects.filter(anonymity="2", country="中国", http="1", status__in=["1", "2"])
     success_http = 0
@@ -61,3 +53,5 @@ def get_valid_proxy_number():
             proxy.save()
             continue
     return {"http_count": proxy_http.count(), "success_http": success_http, "https_count": proxy_https.count(), "success_https" : success_http}
+
+print(count_valid_proxy)

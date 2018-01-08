@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'app.video',
     'app.logs',
     'app.proxy',
+    'app.utils',
 ]
 
 MIDDLEWARE = [

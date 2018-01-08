@@ -91,7 +91,16 @@ class data5uSpider(scrapy.Spider):
                     port = int("".join([str("ABCDEFGHIZ".index(_port)) for _port in port[0].strip().split(" ")[1]])) >> 3
                     anonymity = [_anonymity.strip() for _anonymity in anonymity]
                     country = [_country.strip() for _country in country]
-                    http = [_http.strip() for _http in http]
+                    http_tem = [_http.strip() for _http in http]
+                    http = []
+                    for _http in http_tem:
+                        if "," in _http:
+                            http += [_http_tem.strip() for _http_tem in _http.split(",")]
+                        else:
+                            http += [_http]
+                    for index, _http in enumerate(http):
+                        if " " in _http:
+                            http[index] = "".join([_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
                     city = [_city.strip() for _city in city]
                     isp = [_isp.strip() for _isp in isp]
                     delay = [_delay.strip() for _delay in delay]

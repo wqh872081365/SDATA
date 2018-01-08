@@ -50,5 +50,5 @@ class Proxy(models.Model):
     def __str__(self):
         return "%s:%s" % (self.ip, self.port)
 
-    def clean(self):
+    def clean_old(self):
         pass

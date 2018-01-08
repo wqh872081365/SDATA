@@ -7,11 +7,8 @@ import requests
 
 from app.proxy.helper import get_random_proxy
 from app.utils.scrapy import add_schedule, PROXY_LIST, JOB_DICT, PROXY_HOST_LIST
+from app.proxy.helper import USER_AGENT_LIST
 
-USER_AGENT_LIST = [
-    "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
-]
 
 from app.proxy.helper import TEST_PROXY_URL
 
