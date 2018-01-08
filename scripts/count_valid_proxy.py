@@ -1,17 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from app.proxy.models import Proxy
-from wdata.wdata.downloadermiddleware import USER_AGENT_LIST
-
+from app.proxy.helper import USER_AGENT_LIST, TEST_PROXY_URL
 import requests
 import time
 import random
-
-TEST_PROXY_URL = {
-    "https": "https://www.baidu.com",
-    "http": "http://quotes.toscrape.com"
-}
-
 
 def count_valid_proxy():
     proxy_http = Proxy.objects.filter(anonymity="2", country="中国", http="0", status__in=["1", "2"])
@@ -52,6 +44,6 @@ def count_valid_proxy():
             proxy.status = "0"
             proxy.save()
             continue
-    return {"http_count": proxy_http.count(), "success_http": success_http, "https_count": proxy_https.count(), "success_https" : success_http}
+    print({"http_count": proxy_http.count(), "success_http": success_http, "https_count": proxy_https.count(), "success_https" : success_http})
 
-print(count_valid_proxy)
+count_valid_proxy()
