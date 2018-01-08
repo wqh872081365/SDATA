@@ -20,6 +20,8 @@ DELPROJECT_URL = ROOT_URL + "delproject.json"
 
 PROXY_LIST = ["data5u",]
 
+PROXY_HOST_LIST = ["www.data5u.com", ]
+
 JOB_DICT = {
     "data5u": "data5u"
 }

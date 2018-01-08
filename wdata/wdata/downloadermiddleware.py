@@ -6,7 +6,7 @@ import random
 import requests
 
 from app.proxy.helper import get_random_proxy
-from app.utils.scrapy import add_schedule, PROXY_LIST, JOB_DICT
+from app.utils.scrapy import add_schedule, PROXY_LIST, JOB_DICT, PROXY_HOST_LIST
 
 USER_AGENT_LIST = [
     "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
@@ -39,26 +39,33 @@ class UserAgentMiddleware(object):
 class RandomHttpProxyMiddleware(HttpProxyMiddleware):
 
     def _set_proxy(self, request, scheme):
-        creds, _ = self.proxies[scheme]
-        index = 0
-        while 1:
-            if scheme == "https":
-                proxy = get_random_proxy(anonymity="2", country="中国", http="1", status="1")
-                r = requests.get("https://" + TEST_PROXY_URL, proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)})
-            else:
-                proxy = get_random_proxy(anonymity="2", country="中国", http="0", status="1")
-                r = requests.get("http://" + TEST_PROXY_URL, proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)})
-            index += 1
-            if r.status_code == 200:
-                break
-            else:
-                proxy.status = "0"
-                proxy.save()
-            if index > 10:
-                proxy_site = random.choice(PROXY_LIST)
-                add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))
-            if index > 100:
-                raise("too much invalid proxy")
-        request.meta['proxy'] = "%s://%s:%s" % (scheme, proxy.ip, proxy.port)
-        if creds:
-            request.headers['Proxy-Authorization'] = b'Basic ' + creds
+        if request.headers.get("Host") not in PROXY_HOST_LIST:
+            index = 0
+            while 1:
+                index += 1
+                if index > 10:
+                    proxy_site = random.choice(PROXY_LIST)
+                    add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))
+                if index > 100:
+                    raise("too much invalid proxy")
+                try:
+                    if scheme == "https":
+                        proxy = get_random_proxy(anonymity="2", country="中国", http="1", status="1")
+                        r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+                    else:
+                        proxy = get_random_proxy(anonymity="2", country="中国", http="0", status="1")
+                        r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+                except Exception as e:
+                    print(e)
+                    proxy.status = "0"
+                    proxy.save()
+                    continue
+                if r.status_code == 200:
+                    break
+                else:
+                    proxy.status = "0"
+                    proxy.save()
+            creds, _ = self.proxies[scheme]
+            request.meta['proxy'] = "%s://%s:%s" % (scheme, proxy.ip, proxy.port)
+            if creds:
+                request.headers['Proxy-Authorization'] = b'Basic ' + creds

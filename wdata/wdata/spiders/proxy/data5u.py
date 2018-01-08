@@ -26,38 +26,37 @@ class data5uSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             "http://www.data5u.com/free/index.shtml",
-            # "http://www.data5u.com/free/gngn/index.shtml",
+            "http://www.data5u.com/free/gngn/index.shtml",
             # "http://www.data5u.com/free/gnpt/index.shtml",
             # "http://www.data5u.com/free/gwgn/index.shtml",
             # "http://www.data5u.com/free/gwpt/index.shtml",
 
             # anonymity
-            # "http://www.data5u.com/free/anoy/%E9%AB%98%E5%8C%BF/index.html",
+            "http://www.data5u.com/free/anoy/高匿/index.html",
             # "http://www.data5u.com/free/anoy/%E5%8C%BF%E5%90%8D/index.html",
             # "http://www.data5u.com/free/anoy/%E9%80%8F%E6%98%8E/index.html",
 
             # http
-            # "http://www.data5u.com/free/type/http/index.html",
+            "http://www.data5u.com/free/type/http/index.html",
             # "http://www.data5u.com/free/type/socks5/index.html",
-            # "http://www.data5u.com/free/type/https/index.html",
+            "http://www.data5u.com/free/type/https/index.html",
             # "http://www.data5u.com/free/type/socks4/index.html",
 
             # country
-            # "http://www.data5u.com/free/country/%E4%B8%AD%E5%9B%BD/index.html",
+            "http://www.data5u.com/free/country/中国/index.html",
 
             # city
             # "http://www.data5u.com/free/area/%E5%8C%97%E4%BA%AC%E5%B8%82/index.html",
-            # "http://www.data5u.com/free/area/%E4%B8%8A%E6%B5%B7%E5%B8%82/index.html",
             # ......
 
             # isp
-            # "http://www.data5u.com/free/isp/%E7%94%B5%E4%BF%A1/index.html",
-            # "http://www.data5u.com/free/isp/%E8%81%94%E9%80%9A/index.html",
-            # "http://www.data5u.com/free/isp/%E9%98%BF%E9%87%8C%E4%BA%91/index.html",
+            "http://www.data5u.com/free/isp/电信/index.html",
+            "http://www.data5u.com/free/isp/联通/index.html",
+            "http://www.data5u.com/free/isp/阿里云/index.html",
+            "http://www.data5u.com/free/isp/移动/index.html",
             # ......
 
-        ]
-
+        ] + ["http://www.data5u.com/free/area/%s/index.html" % (area,) for area in ["广东省", "陕西省", "河南省", "江西省", "广西", "上海市", "安徽省", "河北省", "江苏省", "四川省", "福建省", "湖南省", "浙江省", "山东省", "北京市", "湖北省"]]
         headers = {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",

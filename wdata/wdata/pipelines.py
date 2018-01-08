@@ -29,6 +29,8 @@ class PostgresPipeline(object):
                 if Proxy.objects.filter(ip=ip, port=port):
                     proxy = Proxy.objects.get(ip=ip, port=port)
                     proxy.detail["details"].append(item["detail"])
+                    if proxy.status == "0":
+                        proxy.status = "2"
                     # proxy.modified = timezone.now()
                     proxy.save()
                 else:
