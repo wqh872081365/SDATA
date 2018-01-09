@@ -18,12 +18,13 @@ LISTJOBS_URL = ROOT_URL + "listjobs.json"
 DELVERSION_URL = ROOT_URL + "delversion.json"
 DELPROJECT_URL = ROOT_URL + "delproject.json"
 
-PROXY_LIST = ["data5u",]
+PROXY_LIST = ["data5u", "xici"]
 
-PROXY_HOST_LIST = ["www.data5u.com", ]
+PROXY_HOST_LIST = ["www.data5u.com", "www.xicidaili.com"]
 
 JOB_DICT = {
-    "data5u": "data5u"
+    "data5u": "data5u",
+    "xici": "xici",
 }
 
 PROJECT_DICT = {

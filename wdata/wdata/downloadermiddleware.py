@@ -42,7 +42,7 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
                 index += 1
                 if index > 10:
                     proxy_site = random.choice(PROXY_LIST)
-                    add_schedule("wdata", proxy_site, JOB_DICT.ge(proxy_site))
+                    add_schedule("wdata", proxy_site, JOB_DICT.get(proxy_site))
                 if index > 100:
                     raise("too much invalid proxy")
                 try:

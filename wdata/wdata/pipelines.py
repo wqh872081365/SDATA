@@ -35,7 +35,8 @@ class PostgresPipeline(object):
                     proxy.save()
                 else:
                     country = item["country"][:100]
-                    Proxy.objects.create(ip=ip, port=port, source="data5u", anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
+                    source = item["detail"].get("source", "")
+                    Proxy.objects.create(ip=ip, port=port, source=source, anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
             except Exception as e:
                 print(e)
         elif type(item) == BilibiliSeasonItem:

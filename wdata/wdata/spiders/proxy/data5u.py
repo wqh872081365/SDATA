@@ -20,7 +20,7 @@ HTTP_DICT = {
 }
 
 
-class data5uSpider(scrapy.Spider):
+class Data5uSpider(scrapy.Spider):
     name = "data5u"
 
     def start_requests(self):
