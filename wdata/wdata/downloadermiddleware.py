@@ -46,12 +46,12 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
                 if index > 100:
                     raise("too much invalid proxy")
                 try:
-                    if scheme == "https":
-                        proxy = get_random_proxy(anonymity="2", country="中国", http="1", status="1")
-                        r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
-                    else:
-                        proxy = get_random_proxy(anonymity="2", country="中国", http="0", status="1")
-                        r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+                    # if scheme == "https":
+                    proxy = get_random_proxy(anonymity="2", country="中国", http="1", status="1")
+                    r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+                    # else:
+                    #     proxy = get_random_proxy(anonymity="2", country="中国", http="0", status="1")
+                    #     r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
                 except Exception as e:
                     print(e)
                     proxy.status = "0"

@@ -85,7 +85,7 @@ class XiCiSpider(scrapy.Spider):
 
                     proxy = ProxyItem()
                     proxy["ip"] = ip
-                    proxy["port"] = port
+                    proxy["port"] = int(port)
                     if anonymity:
                         proxy["anonymity"] = ANONYMITY_DICT.get(anonymity[0], "-1")
                     else:
@@ -118,10 +118,10 @@ class XiCiSpider(scrapy.Spider):
         try:
             data, page = re.match(r'^http://www.xicidaili.com/(\w*)/(\d*)$', response.url).groups()
             base_url = "http://www.xicidaili.com/" + data
-            if int(page) < 100:
+            if int(page) < 5:
                 url = "%s/%s" % (base_url, int(page) + 1)
                 yield scrapy.Request(url=url, callback=self.parse, headers=HEADERS)
             else:
-                print("page > 100")
+                print("page > 5")
         except Exception as e:
             print(e)

@@ -8,7 +8,7 @@ import random
 
 TEST_PROXY_URL = {
     "https": "https://www.baidu.com",
-    "http": "www.xicidaili.com"
+    # "http": "http://www.xicidaili.com"
 }
 
 USER_AGENT_LIST = [

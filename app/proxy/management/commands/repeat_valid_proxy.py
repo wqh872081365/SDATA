@@ -40,8 +40,8 @@ class Command(BaseCommand):
         #         continue
         for proxy in proxy_https:
             try:
-                r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=5)
-                time.sleep(1)
+                r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=10)
+                time.sleep(5)
                 if r.status_code == 200:
                     success_https += 1
                     if proxy.status == "2":
@@ -49,13 +49,13 @@ class Command(BaseCommand):
                         proxy.save()
                     print("proxy " + "%s://%s:%s" % ("https", proxy.ip, proxy.port) + " ok")
                 else:
-                    proxy.status = "0"
-                    proxy.save()
+                    # proxy.status = "0"
+                    # proxy.save()
                     print("proxy " + "%s://%s:%s" % ("https", proxy.ip, proxy.port) + " status " + str(r.status_code))
             except Exception as e:
                 print(e)
-                proxy.status = "0"
-                proxy.save()
+                # proxy.status = "0"
+                # proxy.save()
                 continue
         print({"https_count": proxy_https.count(), "success_https": success_https})
 
