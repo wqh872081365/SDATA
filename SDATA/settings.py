@@ -123,6 +123,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 try:
     from SDATA.local_settings import *
 except ImportError as e:

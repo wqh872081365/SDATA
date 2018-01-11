@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from app.proxy.models import Proxy
 from app.video.models import BilibiliSeason
+from app.logs.models import UserLog
 
 from wdata.items import ProxyItem, BilibiliSeasonItem
 
@@ -53,4 +54,14 @@ class PostgresPipeline(object):
                     BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
             except Exception as e:
                 print(e)
+                user_log_id = item["detail"].get("user_log_id")
+                try:
+                    user_log = UserLog.objects.get(id=user_log_id)
+                    if user_log.logs.get("failed") and isinstance(user_log.logs["failed"], (tuple, list)):
+                        user_log.logs["failed"].append(season_id)
+                    else:
+                        user_log.logs["failed"] = [season_id,]
+                    user_log.save()
+                except Exception as e:
+                    print(e)
         return item

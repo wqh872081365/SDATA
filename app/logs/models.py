@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone
+from django.conf import settings
 
 # Create your models here.
 
@@ -74,7 +75,7 @@ class UserLog(models.Model):
             "msg": msg,
             "url": response.url,
             "data": response.body,
-            "time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
+            "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
         }
         if not isinstance(type, (str,)):
             type = "fg_msg"
@@ -84,4 +85,4 @@ class UserLog(models.Model):
             self.logs[type] = [log,]
 
     def add_end(self):
-        self.logs["end_time"] = timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
+        self.logs["end_time"] = timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.utils import timezone
+from django.conf import settings as sdata_settings
 
 import scrapy
 import re
@@ -114,7 +115,7 @@ class ProxydbSpider(scrapy.Spider):
                             "delay": " ".join(delay),
                             "verify_time": " ".join(verify_time),
                             "source": "proxydb",
-                            "update_time": timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
+                            "update_time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT)
                         }
                         print(proxy)
                         yield proxy
