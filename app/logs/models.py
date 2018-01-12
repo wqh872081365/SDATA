@@ -74,7 +74,7 @@ class UserLog(models.Model):
         log = {
             "msg": msg,
             "url": response.url,
-            "data": response.body,
+            "data": response.body.decode("utf-8"),
             "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
         }
         if not isinstance(type, (str,)):

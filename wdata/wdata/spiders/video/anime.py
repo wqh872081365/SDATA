@@ -51,7 +51,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             self.user_log_id = user_log.id
         try:
             if response.status == 200:
-                data = response.body
+                data = response.body.decode("utf-8")
                 if data:
                     result = json.loads(data).get("result", {})
                     if result:
@@ -68,7 +68,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 user_log.status = "1"
                                 print(len(season_list), discription)
                                 # for season_id in discription:
-                                yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
+                                # yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
                             else:
                                 user_log.add_msg(msg="no season_id", response=response)
                         else:
@@ -94,7 +94,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             self.user_log_id = user_log.id
         try:
             if response.status == 200:
-                data = response.body
+                data = response.body.decode("utf-8")
                 if data:
                     result = json.loads(data).get("result", {})
                     if result:
@@ -132,7 +132,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             raise(e)
         try:
             if response.status == 200:
-                data = response.body
+                data = response.body.decode("utf-8")
                 if data:
                     result = json.loads(data).get("result", {})
                     if result:
@@ -177,7 +177,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             source_id = int(_season_id[0])
             try:
                 if response.status == 200:
-                    data = re.match(r'^seasonListCallback\(([\s\S]*)\);$', response.body).groups()
+                    data = re.match(r'^seasonListCallback\(([\s\S]*)\);$', response.body.decode("utf-8")).groups()
                     if data:
                         result = json.loads(data[0]).get("result", {})
                         if result:
@@ -208,9 +208,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
                             print(season)
                             yield season
                             if user_log.logs["undone"]:
-                                if len(user_log.logs["undone"]) == len(user_log.logs["discription"]) - 1:
-                                    new_season_id = user_log.logs["undone"].pop(0)
-                                    yield scrapy.Request(url=season_url_next % (new_season_id,), callback=self.season_parse, headers=HEADERS)
+                                new_season_id = user_log.logs["undone"].pop(0)
+                                yield scrapy.Request(url=season_url_next % (new_season_id,), callback=self.season_parse, headers=HEADERS)
                             else:
                                 if user_log.logs["cur_page"] < user_log.logs["pages"]:
                                     user_log.logs["cur_page"] += 1
