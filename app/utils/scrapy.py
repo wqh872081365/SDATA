@@ -24,7 +24,7 @@ PROXY_LIST = [
     "proxydb"
 ]
 
-PROXY_HOST_LIST = ["www.data5u.com", "www.xicidaili.com", "proxydb.net"]
+PROXY_NAME_LIST = ["data5u", "xici", "proxydb"]
 
 JOB_DICT = {
     "data5u": "data5u",
@@ -100,6 +100,10 @@ def del_old_version():
 
 
 def del_old_versions():
+    pass
+
+
+def spider_is_run():
     pass
 
 

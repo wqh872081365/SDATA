@@ -42,7 +42,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             yield scrapy.Request(url=BASE_URL, callback=self.base_parse, headers=HEADERS)
 
     def parse(self, response):
-        season_url = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver"
+        season_url = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver?callback=seasonListCallback"
         try:
             user_log = UserLog.objects.get(id=self.user_log_id)
         except Exception as e:
@@ -125,7 +125,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             user_log.save()
 
     def sub_parse(self, response):
-        season_url = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver"
+        season_url = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver?callback=seasonListCallback"
         try:
             user_log = UserLog.objects.get(id=self.user_log_id)
         except Exception as e:
@@ -167,6 +167,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             user_log.save()
 
     def season_parse(self, response):
+        season_url_next = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver?callback=seasonListCallback"
         _season_id = re.match(r'.*seasoninfo/(\d*)', response.url).groups()
         try:
             user_log = UserLog.objects.get(id=self.user_log_id)
@@ -207,8 +208,9 @@ class BilibiliSeasonSpider(scrapy.Spider):
                             print(season)
                             yield season
                             if user_log.logs["undone"]:
-                                new_season_id = user_log.logs["undone"].pop(0)
-                                yield scrapy.Request(url=season_url % (new_season_id,), callback=self.season_parse, headers=HEADERS)
+                                if len(user_log.logs["undone"]) == len(user_log.logs["discription"]) - 1:
+                                    new_season_id = user_log.logs["undone"].pop(0)
+                                    yield scrapy.Request(url=season_url_next % (new_season_id,), callback=self.season_parse, headers=HEADERS)
                             else:
                                 if user_log.logs["cur_page"] < user_log.logs["pages"]:
                                     user_log.logs["cur_page"] += 1

@@ -42,7 +42,9 @@ class PostgresPipeline(object):
                 print(e)
         elif type(item) == BilibiliSeasonItem:
             season_id = item["season_id"]
+            user_log_id = item["detail"].get("user_log_id")
             try:
+                user_log = UserLog.objects.get(id=user_log_id)
                 if BilibiliSeason.objects.filter(season_id=season_id):
                     season = BilibiliSeason.objects.get(season_id=season_id)
                     season.play_count = item["play_count"]
@@ -52,16 +54,11 @@ class PostgresPipeline(object):
                     season_name = item["season_name"][:100]
                     bangumi_name = item["bangumi_name"][:100]
                     BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
+                if user_log.logs.get("success") and isinstance(user_log.logs["success"], (tuple, list)):
+                    user_log.logs["success"].append(season_id)
+                else:
+                    user_log.logs["success"] = [season_id, ]
+                user_log.save()
             except Exception as e:
                 print(e)
-                user_log_id = item["detail"].get("user_log_id")
-                try:
-                    user_log = UserLog.objects.get(id=user_log_id)
-                    if user_log.logs.get("failed") and isinstance(user_log.logs["failed"], (tuple, list)):
-                        user_log.logs["failed"].append(season_id)
-                    else:
-                        user_log.logs["failed"] = [season_id,]
-                    user_log.save()
-                except Exception as e:
-                    print(e)
         return item

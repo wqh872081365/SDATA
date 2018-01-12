@@ -125,6 +125,8 @@ STATIC_URL = '/static/'
 
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+SPIDER_TIMEOUT = 10
+
 try:
     from SDATA.local_settings import *
 except ImportError as e:
