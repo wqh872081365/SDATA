@@ -83,7 +83,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             print(e)
             user_log.add_msg(msg=traceback.format_exc(), response=response, type="bg_msg")
         finally:
-            user_log.save()
+            user_log.save(update_fields=['logs', 'count', 'status'])
 
     def base_parse(self, response):
         try:
@@ -122,7 +122,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             print(e)
             user_log.add_msg(msg=traceback.format_exc(), response=response, type="bg_msg")
         finally:
-            user_log.save()
+            user_log.save(update_fields=['logs', 'count', 'status'])
 
     def sub_parse(self, response):
         season_url = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver?callback=seasonListCallback"
@@ -164,7 +164,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             print(e)
             user_log.add_msg(msg=traceback.format_exc(), response=response, type="bg_msg")
         finally:
-            user_log.save()
+            user_log.save(update_fields=['logs',])
 
     def season_parse(self, response):
         season_url_next = "https://bangumi.bilibili.com/jsonp/seasoninfo/%s.ver?callback=seasonListCallback"
@@ -225,6 +225,6 @@ class BilibiliSeasonSpider(scrapy.Spider):
                 print(e)
                 add_spider_log(user_log_id=user_log.id, source="0", source_id=source_id, url=response.url, status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
             finally:
-                user_log.save()
+                user_log.save(update_fields=['success', 'status', 'logs'])
         else:
             print(response.url)

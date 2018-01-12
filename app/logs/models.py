@@ -57,6 +57,7 @@ class UserLog(models.Model):
     log_type = models.CharField(max_length=10, choices=TYPE_CHOICE, db_index=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
     logs = JSONField()  # time, start, end, spend, discription(list), type, msg
+    success_detail = JSONField(default={})
 
     count = models.IntegerField()
     success = models.IntegerField()

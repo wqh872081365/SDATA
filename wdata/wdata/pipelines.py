@@ -54,11 +54,11 @@ class PostgresPipeline(object):
                     season_name = item["season_name"][:100]
                     bangumi_name = item["bangumi_name"][:100]
                     BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
-                if user_log.logs.get("success") and isinstance(user_log.logs["success"], (tuple, list)):
-                    user_log.logs["success"].append(season_id)
+                if user_log.success_detail.get("success") and isinstance(user_log.success_detail["success"], (tuple, list)):
+                    user_log.success_detail["success"].append(season_id)
                 else:
-                    user_log.logs["success"] = [season_id, ]
-                user_log.save()
+                    user_log.success_detail["success"] = [season_id, ]
+                user_log.save(update_fields=['success_detail',])
             except Exception as e:
                 print(e)
         return item

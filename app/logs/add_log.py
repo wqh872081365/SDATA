@@ -25,7 +25,7 @@ def add_user_log(type, count, discription, status="5", user_id=1):
         "discription": discription,
         "undone": discription,
         # "failed": [],
-        "success": [],
+        # "success": [],
     }
     log = UserLog(user_id=user_id, log_type=type, status=status, logs=logs, count=count, success=0)
     log.save()
