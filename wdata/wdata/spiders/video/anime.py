@@ -68,7 +68,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 user_log.status = "1"
                                 print(len(season_list), discription)
                                 # for season_id in discription:
-                                # yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
+                                yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
                             else:
                                 user_log.add_msg(msg="no season_id", response=response)
                         else:
