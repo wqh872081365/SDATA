@@ -74,8 +74,8 @@ class UserLog(models.Model):
     def add_msg(self, msg, response, type="fg_msg"):
         log = {
             "msg": msg,
-            "url": response.url,
-            "data": response.body.decode("utf-8"),
+            "url": response.url if response else "",
+            "data": response.body.decode("utf-8") if response else "",
             "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
         }
         if not isinstance(type, (str,)):
