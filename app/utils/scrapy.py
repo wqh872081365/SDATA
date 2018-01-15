@@ -30,6 +30,7 @@ JOB_DICT = {
     "data5u": "data5u",
     "xici": "xici",
     "proxydb": "proxydb",
+    "BilibiliSeason": "BilibiliSeason"
 }
 
 PROJECT_DICT = {
@@ -126,4 +127,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason"))
+    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"page": "1"}))
+    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "2", "season_id_list": "21464,21469"}))
+    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "1", "old_user_log_id": "46"}))
+    pass

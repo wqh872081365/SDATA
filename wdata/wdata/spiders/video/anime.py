@@ -30,7 +30,7 @@ HEADERS = {
 
 SPIDER_TYPE = {
     "0": "normal",
-    "1": "olo user log failed",
+    "1": "old user log failed",
     "2": "season list",
 }
 
@@ -38,7 +38,7 @@ SPIDER_TYPE = {
 class BilibiliSeasonSpider(scrapy.Spider):
     name = "BilibiliSeason"
 
-    def __init__(self, type="0", page=0, old_user_log_id=0, season_id_list=None, *args, **kwargs):
+    def __init__(self, type="0", page=0, old_user_log_id=0, season_id_list="", *args, **kwargs):
         super(BilibiliSeasonSpider, self).__init__(*args, **kwargs)
         self.type = type
         self.page = page
@@ -59,11 +59,11 @@ class BilibiliSeasonSpider(scrapy.Spider):
                 user_log = add_user_log(type=LOG_TYPE, count=0, discription=[])
                 self.user_log_id = user_log.id
             try:
-                if type == "1":
+                if self.type == "1":
                     discription = list_spider_failed(int(self.old_user_log_id), LOG_TYPE)
                 else:
-                    if self.season_id_list and isinstance(self.season_id_list, (tuple, list)):
-                        discription = [int(season_id) for season_id in self.season_id_list]
+                    if self.season_id_list and isinstance(self.season_id_list, (str,)):
+                        discription = [int(season_id) for season_id in self.season_id_list.split(",")]
                     else:
                         discription = []
                 if discription:
@@ -193,7 +193,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                     user_log.logs["undone"] += discription
                                 else:
                                     user_log.logs["discription"] = discription
-                                    user_log.logs["undone"] = discription
+                                    user_log.logs["undone"] = discription[::]
                                 print(len(season_list), discription)
                                 # for season_id in discription:
                                 new_season_id = user_log.logs["undone"].pop(0)
