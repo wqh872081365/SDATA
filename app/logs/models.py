@@ -57,7 +57,7 @@ class UserLog(models.Model):
     log_type = models.CharField(max_length=10, choices=TYPE_CHOICE, db_index=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, db_index=True)
     logs = JSONField()  # time, start, end, spend, discription(list), type, msg
-    success_detail = JSONField(default={})
+    success_detail = JSONField(default={}) # success(list), msg
 
     count = models.IntegerField()
     success = models.IntegerField()
@@ -70,20 +70,3 @@ class UserLog(models.Model):
 
     def __str__(self):
         return self.log_type
-
-    def add_msg(self, msg, response, type="fg_msg"):
-        log = {
-            "msg": msg,
-            "url": response.url if response else "",
-            "data": response.body.decode("utf-8") if response else "",
-            "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
-        }
-        if not isinstance(type, (str,)):
-            type = "fg_msg"
-        if self.logs.get(type) and isinstance(self.logs[type], (tuple, list)):
-            self.logs[type].append(log)
-        else:
-            self.logs[type] = [log,]
-
-    def add_end(self):
-        self.logs["end_time"] = timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)

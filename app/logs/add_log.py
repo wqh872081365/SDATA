@@ -32,6 +32,41 @@ def add_user_log(type, count, discription, status="5", user_id=1):
     return log
 
 
+def add_msg(user_log, msg, response, type="fg_msg", source="spider"):
+    if source == "pipeline":
+        log = {
+            "msg": msg,
+            "url": "",
+            "data": response if response else "",
+            "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
+        }
+        if not isinstance(type, (str,)):
+            type = "fg_msg"
+        if user_log.success_detail.get(type) and isinstance(user_log.success_detail[type], (tuple, list)):
+            user_log.success_detail[type].append(log)
+        else:
+            user_log.success_detail[type] = [log, ]
+    else:
+        log = {
+            "msg": msg,
+            "url": response.url if response else "",
+            "data": response.body.decode("utf-8") if response else "",
+            "time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
+        }
+        if not isinstance(type, (str,)):
+            type = "fg_msg"
+        if user_log.logs.get(type) and isinstance(user_log.logs[type], (tuple, list)):
+            user_log.logs[type].append(log)
+        else:
+            user_log.logs[type] = [log,]
+    return user_log
+
+
+def add_end(user_log):
+    user_log.logs["end_time"] = timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
+    return user_log
+
+
 def clean_log():
     pass
 

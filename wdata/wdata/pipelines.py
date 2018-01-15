@@ -8,9 +8,12 @@
 from django.core.validators import validate_ipv46_address
 from django.utils import timezone
 
+import traceback
+
 from app.proxy.models import Proxy
 from app.video.models import BilibiliSeason
 from app.logs.models import UserLog
+from app.logs.add_log import add_msg
 
 from wdata.items import ProxyItem, BilibiliSeasonItem
 
@@ -45,6 +48,9 @@ class PostgresPipeline(object):
             user_log_id = item["detail"].get("user_log_id")
             try:
                 user_log = UserLog.objects.get(id=user_log_id)
+            except Exception as e:
+                raise(e)
+            try:
                 if BilibiliSeason.objects.filter(season_id=season_id):
                     season = BilibiliSeason.objects.get(season_id=season_id)
                     season.play_count = item["play_count"]
@@ -58,7 +64,9 @@ class PostgresPipeline(object):
                     user_log.success_detail["success"].append(season_id)
                 else:
                     user_log.success_detail["success"] = [season_id, ]
-                user_log.save(update_fields=['success_detail',])
             except Exception as e:
                 print(e)
+                user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
+            finally:
+                user_log.save(update_fields=['success_detail', ])
         return item
