@@ -19,7 +19,7 @@ def add_spider_log(user_log_id, source, source_id, url, status, msg, response, t
     return log
 
 
-def add_user_log(type, count, discription, status="5", user_id=1):
+def add_user_log(type, count, discription, status="5", user_id=settings.USER_ID):
     logs = {
         "start_time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT),
         "discription": discription,
