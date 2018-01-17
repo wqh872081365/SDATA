@@ -21,6 +21,8 @@ class WdataItem(scrapy.Item):
 class BilibiliSeasonItem(DjangoItem):
     django_model = BilibiliSeason
 
+    complete = scrapy.Field()
+
 
 class ProxyItem(DjangoItem):
     django_model = Proxy

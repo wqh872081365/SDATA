@@ -254,15 +254,22 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 user_log.status = "2"
                                 user_log = add_end(user_log)
                             print(season)
-                            yield season
+
                             if user_log.logs["undone"]:
+                                season["complete"] = False
+                                yield season
                                 new_season_id = user_log.logs["undone"].pop(0)
                                 yield scrapy.Request(url=season_url_next % (new_season_id,), callback=self.season_parse, headers=HEADERS)
                             else:
                                 if user_log.logs["cur_page"] < user_log.logs["pages"]:
+                                    season["complete"] = False
+                                    yield season
                                     user_log.logs["cur_page"] += 1
                                     url = "%(base_url)s?page=%(page)s" % {"base_url": BASE_URL, "page": user_log.logs["cur_page"]}
                                     yield scrapy.Request(url=url, callback=self.sub_parse, headers=HEADERS)
+                                else:
+                                    season["complete"] = True
+                                    yield season
                         else:
                             add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="3", msg="result is null", response=response)
                     else:

@@ -7,13 +7,14 @@
 
 from django.core.validators import validate_ipv46_address
 from django.utils import timezone
+from django.conf import settings as sdata_settings
 
 import traceback
 
 from app.proxy.models import Proxy
 from app.video.models import BilibiliSeason
 from app.logs.models import UserLog
-from app.logs.add_log import add_msg
+from app.logs.add_log import add_msg, update_user_log
 
 from wdata.items import ProxyItem, BilibiliSeasonItem
 
@@ -44,29 +45,54 @@ class PostgresPipeline(object):
             except Exception as e:
                 print(e)
         elif type(item) == BilibiliSeasonItem:
-            season_id = item["season_id"]
-            user_log_id = item["detail"].get("user_log_id")
-            try:
-                user_log = UserLog.objects.get(id=user_log_id)
-            except Exception as e:
-                raise(e)
-            try:
-                if BilibiliSeason.objects.filter(season_id=season_id):
-                    season = BilibiliSeason.objects.get(season_id=season_id)
-                    season.play_count = item["play_count"]
-                    season.detail["details"].append(item["detail"])
-                    season.save()
-                else:
-                    season_name = item["season_name"][:100]
-                    bangumi_name = item["bangumi_name"][:100]
-                    BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
-                if user_log.success_detail.get("success") and isinstance(user_log.success_detail["success"], (tuple, list)):
-                    user_log.success_detail["success"].append(season_id)
-                else:
-                    user_log.success_detail["success"] = [season_id, ]
-            except Exception as e:
-                print(e)
-                user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
-            finally:
-                user_log.save(update_fields=['success_detail', ])
+            if spider.name == "BilibiliSeasonHigh":
+                season_id = item["season_id"]
+                user_log_id = item["detail"].get("user_log_id")
+                try:
+                    if BilibiliSeason.objects.filter(season_id=season_id):
+                        season = BilibiliSeason.objects.get(season_id=season_id)
+                        season.play_count = item["play_count"]
+                        # season.detail["details"].append(item["detail"])
+                        season.detail["details"].append({"data": {"coins": item["detail"].get("data", {}).get("coins", ""), "favorites": item["detail"].get("data", {}).get("favorites", ""), "play_count": item["detail"].get("data", {}).get("play_count", ""), "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")}, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": user_log_id})
+                        season.save()
+                    else:
+                        season_name = item["season_name"][:100]
+                        bangumi_name = item["bangumi_name"][:100]
+                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
+                except Exception as e:
+                    print(e)
+                finally:
+                    pass
+            else:
+                season_id = item["season_id"]
+                user_log_id = item["detail"].get("user_log_id")
+                try:
+                    user_log = UserLog.objects.get(id=user_log_id)
+                except Exception as e:
+                    raise (e)
+                try:
+                    if BilibiliSeason.objects.filter(season_id=season_id):
+                        season = BilibiliSeason.objects.get(season_id=season_id)
+                        season.play_count = item["play_count"]
+                        # season.detail["details"].append(item["detail"])
+                        season.detail["details"].append({"data": {"coins": item["detail"].get("data", {}).get("coins", ""), "favorites": item["detail"].get("data", {}).get("favorites", ""), "play_count": item["detail"].get("data", {}).get("play_count", ""), "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")}, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": user_log.id})
+                        season.save()
+                    else:
+                        season_name = item["season_name"][:100]
+                        bangumi_name = item["bangumi_name"][:100]
+                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
+                    if user_log.success_detail.get("success") and isinstance(user_log.success_detail["success"], (tuple, list)):
+                        user_log.success_detail["success"].append(season_id)
+                    else:
+                        user_log.success_detail["success"] = [season_id, ]
+                    if item["complete"]:
+                        if len(user_log.success_detail["success"]) == len(user_log.logs["discription"]):
+                            user_log.success_detail["complete"] = True
+                        else:
+                            user_log.success_detail["complete"] = False
+                except Exception as e:
+                    print(e)
+                    user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
+                finally:
+                    user_log.save(update_fields=['success_detail', ])
         return item

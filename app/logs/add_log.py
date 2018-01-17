@@ -2,6 +2,8 @@
 from django.utils import timezone
 from django.conf import settings
 from app.logs.models import SpiderLog, UserLog
+from app.video.models import BilibiliSeason
+
 
 def add_spider_log(user_log_id, source, source_id, url, status, msg, response, type="fg_msg"):
     if not isinstance(type, (str,)):
@@ -73,3 +75,33 @@ def clean_log():
 
 def show_spider_log(user_log_id):
     pass
+
+
+def update_user_log(user_log_id):
+    try:
+        user_log = UserLog.objects.get(id=user_log_id)
+        if user_log.status == "1":
+            user_log.status = "2"
+        discription = user_log.logs["discription"]
+        success_detail = []
+        for season_id in discription:
+            if find_user_log_in_season(user_log_id, season_id):
+                success_detail.append(season_id)
+        user_log.success = len(success_detail)
+        user_log.success_detail = {"success": success_detail, "update_time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)}
+        if len(success_detail) == len(discription):
+            user_log.success_detail["complete"] = True
+        user_log.save(update_fields=['success', 'status', 'success_detail'])
+    except Exception as e:
+        print(e)
+
+
+def find_user_log_in_season(user_log_id, season_id):
+    try:
+        season = BilibiliSeason.objects.get(season_id=season_id)
+        for data in reversed(season.detail["details"]):
+            if data.get("user_log_id") == user_log_id:
+                return True
+        return False
+    except Exception as e:
+        print(e)
