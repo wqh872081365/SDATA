@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_rq",
     'app.video',
     'app.logs',
     'app.proxy',
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'SDATA.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +129,29 @@ LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 SPIDER_TIMEOUT = 10
 
 USER_ID = 1
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 360,
+    },
+    'high': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 86400,
+    },
+    'low': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 60,
+    },
+}
+
+RQ_SHOW_ADMIN_LINK = True
 
 try:
     from SDATA.local_settings import *

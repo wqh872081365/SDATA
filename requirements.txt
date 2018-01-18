@@ -10,3 +10,5 @@ scrapyd==1.2.0
 scrapyd-client==1.1.0
 fabric3==1.13.1.post1
 rq==0.10.0
+django-rq==1.0.1
+rq_scheduler==0.7.0
