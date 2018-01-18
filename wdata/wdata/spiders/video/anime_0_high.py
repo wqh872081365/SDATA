@@ -6,6 +6,7 @@ import scrapy
 import re
 import json
 import traceback
+import logging
 
 from wdata.items import BilibiliSeasonItem
 from app.logs.add_log import add_spider_log, add_user_log, add_msg, add_end
@@ -56,6 +57,7 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                 user_log = UserLog.objects.get(id=self.user_log_id)
             except Exception as e:
                 print(e)
+                self.log(e, logging.ERROR)
                 user_log = add_user_log(type=LOG_TYPE, count=0, discription=[])
                 self.user_log_id = user_log.id
             try:
@@ -76,17 +78,21 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                     user_log.status = "1"
                     user_log.save(update_fields=['logs', 'count', 'status'])
                     print(len(discription), discription)
+                    self.log("%s %s" % (len(discription), discription), logging.INFO)
                     for season_id in discription:
                         try:
                             yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
                         except Exception as e:
                             print(e)
+                            self.log(e, logging.ERROR)
                             continue
                 else:
                     print("no failed list")
+                    self.log("no failed list", logging.WARNING)
                     # user_log = add_msg(user_log=user_log, msg="no failed list", response="")
             except Exception as e:
                 print(e)
+                self.log(e, logging.ERROR)
                 # user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response="", type="bg_msg")
             finally:
                 pass
@@ -99,6 +105,7 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
             user_log = UserLog.objects.get(id=self.user_log_id)
         except Exception as e:
             print(e)
+            self.log(e, logging.ERROR)
             user_log = add_user_log(type=LOG_TYPE, count=0, discription=[])
             self.user_log_id = user_log.id
         try:
@@ -120,29 +127,37 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                                 user_log.status = "1"
                                 user_log.save(update_fields=['logs', 'count', 'status'])
                                 print(len(season_list), discription)
+                                self.log("%s %s" % (len(season_list), discription), logging.INFO)
                                 for season_id in discription:
                                     try:
                                         yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
                                     except Exception as e:
                                         print(e)
+                                        self.log(e, logging.ERROR)
                                         continue
                             else:
                                 print("no season_id")
+                                self.log("no season_id", logging.WARNING)
                                 # user_log = add_msg(user_log=user_log, msg="no season_id", response=response)
                         else:
                             print("season_list is null")
+                            self.log("season_list is null", logging.WARNING)
                             # user_log = add_msg(user_log=user_log, msg="season_list is null", response=response)
                     else:
                         print("result is null")
+                        self.log("result is null", logging.WARNING)
                         # user_log = add_msg(user_log=user_log, msg="result is null", response=response)
                 else:
                     print("response body is null")
+                    self.log("response body is null", logging.WARNING)
                     # user_log = add_msg(user_log=user_log, msg="response body is null", response=response)
             else:
                 print("response status %s" % (response.status,))
+                self.log("response status %s" % (response.status,), logging.WARNING)
                 # user_log = add_msg(user_log=user_log, msg="response status %s" % (response.status,), response=response)
         except Exception as e:
             print(e)
+            self.log(e, logging.ERROR)
             # user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=response, type="bg_msg")
         finally:
             pass
@@ -181,17 +196,22 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                             yield season
                         else:
                             print("result is null")
+                            self.log("result is null", logging.WARNING)
                             # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="3", msg="result is null", response=response)
                     else:
                         print("response body is not verify")
+                        self.log("response body is not verify", logging.WARNING)
                         # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="2", msg="response body is not verify", response=response)
                 else:
                     print("response status %s" % (response.status,))
+                    self.log("response status %s" % (response.status,), logging.WARNING)
                     # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="0", msg="response status %s" % (response.status,), response=response)
             except Exception as e:
                 print(e)
+                self.log(e, logging.ERROR)
                 # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
             finally:
                 pass
         else:
             print(response.url)
+            self.log(response.url, logging.WARNING)

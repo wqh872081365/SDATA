@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.conf import settings as sdata_settings
 
 import traceback
+import logging
 
 from app.proxy.models import Proxy
 from app.video.models import BilibiliSeason
@@ -44,6 +45,7 @@ class PostgresPipeline(object):
                     Proxy.objects.create(ip=ip, port=port, source=source, anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
             except Exception as e:
                 print(e)
+                spider.log(e, logging.ERROR)
         elif type(item) == BilibiliSeasonItem:
             if spider.name == "BilibiliSeasonHigh":
                 season_id = item["season_id"]
@@ -61,6 +63,7 @@ class PostgresPipeline(object):
                         BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
                 except Exception as e:
                     print(e)
+                    spider.log(e, logging.ERROR)
                 finally:
                     pass
             else:
@@ -92,6 +95,7 @@ class PostgresPipeline(object):
                             user_log.success_detail["complete"] = False
                 except Exception as e:
                     print(e)
+                    spider.log(e, logging.ERROR)
                     user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
                 finally:
                     user_log.save(update_fields=['success_detail', ])

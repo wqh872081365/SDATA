@@ -4,6 +4,7 @@ from scrapy import signals
 from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware, urlparse_cached
 import random
 import requests
+import logging
 import time
 
 from django.conf import settings as sdata_settings
@@ -62,10 +63,12 @@ class RandomHttpProxyMiddleware(HttpProxyMiddleware):
                     #     r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
                 except Exception as e:
                     print(e)
+                    spider.log(e, logging.ERROR)
                     # proxy.status = "0"
                     # proxy.save()
                     continue
                 if r.status_code == 200:
+                    spider.log("user proxy %s:%s" % (proxy.ip, proxy.port), logging.INFO)
                     print("user proxy %s:%s" % (proxy.ip, proxy.port))
                     break
                 else:

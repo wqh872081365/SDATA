@@ -134,5 +134,5 @@ if __name__ == "__main__":
     # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"page": "1"}))
     # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "2", "season_id_list": "21603"}))
     # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "1", "old_user_log_id": "46"}))
-    # print(add_schedule("wdata", "BilibiliSeasonHigh", "BilibiliSeasonHigh", **{"type": "2", "season_id_list": "21603,21594"}))
+    # print(add_schedule("wdata", "BilibiliSeasonHigh", "BilibiliSeasonHigh", **{"type": "2", "season_id_list": "21603"}))
     pass

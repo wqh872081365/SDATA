@@ -6,6 +6,7 @@ from django.conf import settings as sdata_settings
 import scrapy
 import re
 import base64
+import logging
 
 from wdata.items import ProxyItem
 
@@ -71,6 +72,7 @@ class ProxydbSpider(scrapy.Spider):
                 delay = sel.xpath("td[8]/span/text()").extract()
                 verify_time = sel.xpath("td[11]/span/@title").extract()
 
+                self.log(str([ip, port, anonymity, http, country, isp, delay, verify_time]), logging.INFO)
                 print(ip, port, anonymity, http, country, isp, delay, verify_time)
 
                 if ip and port:
@@ -121,6 +123,7 @@ class ProxydbSpider(scrapy.Spider):
                         yield proxy
                     except Exception as e:
                         print(e)
+                        self.log(e, logging.ERROR)
                         continue
         if sel_list:
             try:
@@ -131,5 +134,7 @@ class ProxydbSpider(scrapy.Spider):
                     yield scrapy.Request(url=url, callback=self.parse, headers=HEADERS)
                 else:
                     print("offset > 100")
+                    self.log("offset > 100", logging.WARNING)
             except Exception as e:
                 print(e)
+                self.log(e, logging.ERROR)

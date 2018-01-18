@@ -3,6 +3,7 @@
 from django.utils import timezone
 from django.conf import settings as sdata_settings
 import scrapy
+import logging
 
 from wdata.items import ProxyItem
 
@@ -82,7 +83,8 @@ class Data5uSpider(scrapy.Spider):
             isp = sel.xpath("span[7]/li/a/text()").extract()
             delay = sel.xpath("span[8]/li/text()").extract()
             verify_time = sel.xpath("span[9]/li/text()").extract()
-            
+
+            self.log(str([ip, port, anonymity, http, country, city, isp, delay, verify_time]), logging.INFO)
             print(ip, port, anonymity, http, country, city, isp, delay, verify_time)
 
             if ip and port:
@@ -136,4 +138,5 @@ class Data5uSpider(scrapy.Spider):
                     yield proxy
                 except Exception as e:
                     print(e)
+                    self.log(e, logging.ERROR)
                     continue

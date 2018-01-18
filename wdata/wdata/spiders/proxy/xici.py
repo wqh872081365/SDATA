@@ -5,6 +5,7 @@ from django.conf import settings as sdata_settings
 
 import scrapy
 import re
+import logging
 
 from wdata.items import ProxyItem
 
@@ -62,6 +63,7 @@ class XiCiSpider(scrapy.Spider):
             delay = sel.xpath("td[8]/div/@title").extract()
             verify_time = sel.xpath("td[10]/text()").extract()
 
+            self.log(", ".join([ip, port, anonymity, http, country, city, delay, verify_time]), logging.INFO)
             print(ip, port, anonymity, http, country, city, delay, verify_time)
 
             if ip and port:
@@ -114,6 +116,7 @@ class XiCiSpider(scrapy.Spider):
                     yield proxy
                 except Exception as e:
                     print(e)
+                    self.log(e, logging.ERROR)
                     continue
 
         try:
@@ -124,5 +127,7 @@ class XiCiSpider(scrapy.Spider):
                 yield scrapy.Request(url=url, callback=self.parse, headers=HEADERS)
             else:
                 print("page > 5")
+                self.log("page > 5", logging.WARNING)
         except Exception as e:
             print(e)
+            self.log(e, logging.ERROR)
