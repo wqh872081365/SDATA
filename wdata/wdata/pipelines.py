@@ -88,6 +88,7 @@ class PostgresPipeline(object):
                         user_log.success_detail["success"].append(season_id)
                     else:
                         user_log.success_detail["success"] = [season_id, ]
+                    user_log.success += 1
                     if item["complete"]:
                         if len(user_log.success_detail["success"]) == len(user_log.logs["discription"]):
                             user_log.success_detail["complete"] = True
@@ -98,5 +99,5 @@ class PostgresPipeline(object):
                     spider.log(e, logging.ERROR)
                     user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
                 finally:
-                    user_log.save(update_fields=['success_detail', ])
+                    user_log.save(update_fields=['success_detail', 'success'])
         return item

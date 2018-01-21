@@ -3,6 +3,7 @@
 import requests
 import json
 import sys
+import uuid
 
 # scrapyd api
 
@@ -27,11 +28,11 @@ PROXY_LIST = [
 PROXY_NAME_LIST = ["data5u", "xici", "proxydb"]
 
 JOB_DICT = {
-    "data5u": "data5u",
-    "xici": "xici",
-    "proxydb": "proxydb",
-    "BilibiliSeason": "BilibiliSeason",
-    "BilibiliSeasonHigh": "BilibiliSeasonHigh",
+    "data5u": "",
+    "xici": "",
+    "proxydb": "",
+    "BilibiliSeason": "",
+    "BilibiliSeasonHigh": "",
 }
 
 PROJECT_DICT = {
@@ -113,8 +114,9 @@ def main():
     if len(sys.argv) > 1:
         if sys.argv[1] == "del_project":
             print(del_project("wdata"))
-        elif sys.argv[1] == "add_schedule" and len(sys.argv) == 3 and JOB_DICT.get(sys.argv[2]):
-            print(add_schedule("wdata", sys.argv[2], JOB_DICT[sys.argv[2]]))
+        elif sys.argv[1] == "add_schedule" and len(sys.argv) == 3 and sys.argv[2] in JOB_DICT:
+            job_id = uuid.uuid1().hex
+            print(add_schedule("wdata", sys.argv[2], job_id, **{"job_id": job_id}))
         else:
             print("fab error")
     else:
@@ -129,10 +131,11 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    # print(add_schedule("wdata", "proxydb", "proxydb"))
-    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason"))
-    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"page": "1"}))
-    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "2", "season_id_list": "21603"}))
-    # print(add_schedule("wdata", "BilibiliSeason", "BilibiliSeason", **{"type": "1", "old_user_log_id": "46"}))
-    # print(add_schedule("wdata", "BilibiliSeasonHigh", "BilibiliSeasonHigh", **{"type": "2", "season_id_list": "21603"}))
+    job_id = uuid.uuid1().hex
+    # print(add_schedule("wdata", "proxydb", job_id))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"page": "1", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"type": "1", "old_user_log_id": "46", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeasonHigh", job_id, **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
     pass
