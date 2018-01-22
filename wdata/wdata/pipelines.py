@@ -15,7 +15,7 @@ import logging
 from app.proxy.models import Proxy
 from app.video.models import BilibiliSeason
 from app.logs.models import UserLog
-from app.logs.add_log import add_msg, update_user_log
+from app.logs.add_log import add_msg, update_user_log, add_end
 
 from wdata.items import ProxyItem, BilibiliSeasonItem
 
@@ -90,6 +90,7 @@ class PostgresPipeline(object):
                         user_log.success_detail["success"] = [season_id, ]
                     user_log.success += 1
                     if item["complete"]:
+                        user_log = add_end(user_log)
                         if len(user_log.success_detail["success"]) == len(user_log.logs["discription"]):
                             user_log.success_detail["complete"] = True
                         else:

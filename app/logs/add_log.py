@@ -68,7 +68,7 @@ def add_msg(user_log, msg, response, type="fg_msg", source="spider"):
 
 
 def add_end(user_log):
-    user_log.logs["end_time"] = timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
+    user_log.success_detail["end_time"] = timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
     return user_log
 
 

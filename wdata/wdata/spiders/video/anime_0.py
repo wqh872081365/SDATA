@@ -9,7 +9,7 @@ import traceback
 import logging
 
 from wdata.items import BilibiliSeasonItem
-from app.logs.add_log import add_spider_log, add_user_log, add_msg, add_end
+from app.logs.add_log import add_spider_log, add_user_log, add_msg
 from app.video.helper import list_spider_failed
 from app.logs.models import UserLog
 
@@ -279,7 +279,6 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 else:
                                     season["complete"] = True
                                     user_log.status = "2"
-                                    user_log = add_end(user_log)
                                     yield season
                         else:
                             add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="3", msg="result is null", response=response)
