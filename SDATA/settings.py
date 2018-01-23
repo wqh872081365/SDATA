@@ -149,6 +149,46 @@ RQ_QUEUES = {
         'DB': 2,
         'DEFAULT_TIMEOUT': 60,
     },
+
+    'add_spider': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 86400,
+    },
+    'spider_pipeline': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 360,
+    },
+
+    # scheduler
+    'scheduler': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 86400,
+    },
+
+    'spider_status': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 86400,
+    },
+    'rq_worker_number_control': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 360,
+    },
+    'proxy_valid': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 2,
+        'DEFAULT_TIMEOUT': 86400,
+    },
 }
 
 RQ_SHOW_ADMIN_LINK = True

@@ -70,3 +70,7 @@ class UserLog(models.Model):
 
     def __str__(self):
         return self.log_type
+
+    @property
+    def job_id(self):
+        return self.logs.get("job_id", "")
