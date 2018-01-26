@@ -74,3 +74,15 @@ class UserLog(models.Model):
     @property
     def job_id(self):
         return self.logs.get("job_id", "")
+
+    @property
+    def project(self):
+        return self.logs.get("project", "")
+
+    @property
+    def spider(self):
+        return self.logs.get("spider", "")
+
+    @property
+    def discription(self):
+        return self.logs.get("discription", "")

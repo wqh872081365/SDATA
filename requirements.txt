@@ -12,3 +12,6 @@ fabric3==1.13.1.post1
 rq==0.10.0
 django-rq==1.0.1
 rq_scheduler==0.7.0
+gunicorn==19.7.1
+greenlet==0.4.12
+gevent==1.2.2

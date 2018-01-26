@@ -53,7 +53,9 @@ def get_daemonstatus(daemon_url=DAEMON_URL):
 #     return json.loads(r_add_version.text)
 
 
-def add_schedule(project, spider, jobid, schedule_url=SCHEDULE_URL, **kwargs):
+def add_schedule(project, spider, jobid="", schedule_url=SCHEDULE_URL, **kwargs):
+    if not jobid:
+        jobid = uuid.uuid1().hex
     kwargs["project"] = project
     kwargs["spider"]= spider
     kwargs["jobid"] = jobid

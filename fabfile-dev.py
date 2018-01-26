@@ -17,7 +17,7 @@ def start_rq_scheduler():
 
 
 def start_pgadmin4():
-    local(env_path + "/bin/python3.6 " + "/home/wqh/wangqihui/work/env/python3_env/pgadmin4/lib/python3.6/site-packages/pgadmin4/pgAdmin4.py")
+    local("/home/wqh/wangqihui/work/env/python3_env/pgadmin4/bin/python3.6 " + "/home/wqh/wangqihui/work/env/python3_env/pgadmin4/lib/python3.6/site-packages/pgadmin4/pgAdmin4.py")
 
 
 def pip_upgrade():
@@ -69,3 +69,7 @@ def deploy():
     # execute(start_rq_scheduler)
 
     execute(add_rq_job)
+
+
+def update_user_logs(user_log_id):
+    local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "update_user_logs " + user_log_id)
