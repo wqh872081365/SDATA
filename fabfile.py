@@ -135,7 +135,7 @@ def update_supervisor():
 @parallel
 @roles('apps')
 def update_settings():
-    sudo("scp -f " + code_path + "/deploy/local_settings_aliyun.py " + " %s@%s:" % ((env.user, env.host)) + code_path + "/SDATA/local_settings.py")
+    sudo("scp -f " + code_path + "/deploy/local_settings_aliyun.py " + "%s@%s:" % ((env.user, env.host)) + code_path + "/SDATA/local_settings.py")
     sudo("supervisorctl restart sdata_gunicorn")
 
 @parallel
