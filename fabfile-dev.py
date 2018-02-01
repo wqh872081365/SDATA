@@ -95,8 +95,8 @@ def update_settings():
     local("sudo supervisorctl restart sdata_gunicorn")
 
 def update_nginx():
-    local("sudo cp -f " + code_path + "/deploy/sdata_nginx.conf " + "/etc/nginx/sites-available/sdata_nginx.conf")
-    local("sudo ln -sf /etc/nginx/sites-available/sdata_nginx.conf /etc/nginx/sites-enabled/sdata_nginx.conf")
+    local("sudo cp -f " + code_path + "/deploy/sdata_nginx_dev.conf " + "/etc/nginx/sites-available/sdata_nginx_dev.conf")
+    local("sudo ln -sf /etc/nginx/sites-available/sdata_nginx_dev.conf /etc/nginx/sites-enabled/sdata_nginx_dev.conf")
     execute(reload_nginx)
 
 

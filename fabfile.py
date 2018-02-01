@@ -129,7 +129,7 @@ def clean_log():
 @parallel
 @roles('apps')
 def update_supervisor():
-    sudo("cp -f " + code_path + "/deploy/sdata_supervisor_dev.conf " + "/etc/supervisor/conf.d/sdata_supervisor_dev.conf")
+    sudo("cp -f " + code_path + "/deploy/sdata_supervisor.conf " + "/etc/supervisor/conf.d/sdata_supervisor.conf")
     sudo("supervisorctl reload")
 
 @parallel
