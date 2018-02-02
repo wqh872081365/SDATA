@@ -163,6 +163,7 @@ def prepare_file():
                     with cd("gunicorn"):
                         run("touch sdata_gunicorn_stderr.log")
                         run("touch sdata_gunicorn_stdout.log")
+                        run("touch sdata_gunicorn_access.log")
                     run("mkdir -p rq")
                     with cd("rq"):
                         run("touch sdata_rq_rqscheduler_stderr.log")

@@ -115,6 +115,7 @@ def prepare_file():
                     with lcd("gunicorn"):
                         local("touch sdata_gunicorn_stderr.log")
                         local("touch sdata_gunicorn_stdout.log")
+                        local("touch sdata_gunicorn_access.log")
                     local("mkdir -p rq")
                     with lcd("rq"):
                         local("touch sdata_rq_rqscheduler_stderr.log")
