@@ -1,8 +1,8 @@
 from fabric.api import *
 
-code_path = "/home/wqh/wangqihui/work/SDATA"
-env_root = "/home/wqh/wangqihui/work/env/python3_env"
-env_path = "/home/wqh/wangqihui/work/env/python3_env/sdata"
+code_path = "/home/wqh/wangqihui/work/wangqihui.me/wangqihui/SDATA"
+env_root = "/home/wqh/wangqihui/work/wangqihui.me/wangqihui/python/python3_env"
+env_path = "/home/wqh/wangqihui/work/wangqihui.me/wangqihui/python/python3_env/SDATA"
 git_repository = "git@github.com:wqh872081365/SDATA.git"
 
 
@@ -19,7 +19,8 @@ def migrate_sdata():
     local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "migrate")
 
 def update_code(branch="master"):
-    local("git pull origin %s" % (branch,))
+    with lcd(code_path):
+        local("git pull origin %s" % (branch,))
 
 def update_static():
     local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "collectstatic --noinput")

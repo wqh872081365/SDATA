@@ -31,7 +31,8 @@ def migrate_sdata():
 @parallel
 @roles('apps')
 def update_code(branch="master"):
-    run("git pull origin %s" % (branch,))
+    with cd(code_path):
+        run("git pull origin %s" % (branch,))
 
 @roles('static')
 def update_static():

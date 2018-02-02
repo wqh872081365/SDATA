@@ -19,7 +19,8 @@ def migrate_sdata():
     local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "migrate")
 
 def update_code(branch="master"):
-    local("git pull origin %s" % (branch,))
+    with lcd(code_path):
+        local("git pull origin %s" % (branch,))
 
 def update_static():
     local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "collectstatic --noinput")
