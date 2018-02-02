@@ -152,22 +152,47 @@ def update_nginx():
 def prepare_file():
     with cd("/home"):
         run("mkdir -p wangqihui.me")
-        with cd("wanqihui.me"):
-            run("mkdir -p wanqihui")
-            with cd("wanqihui"):
+        with cd("wangqihui.me"):
+            run("mkdir -p wangqihui")
+            with cd("wangqihui"):
                 run("git clone " + git_repository)
                 run("mkdir -p SDATA_LOG")
                 with cd("SDATA_LOG"):
                     run("mkdir -p gunicorn")
+                    with cd("gunicorn"):
+                        run("touch sdata_gunicorn_stderr.log")
+                        run("touch sdata_gunicorn_stdout.log")
                     run("mkdir -p rq")
+                    with cd("rq"):
+                        run("touch sdata_rq_rqscheduler_stderr.log")
+                        run("touch sdata_rq_rqscheduler_stdout.log")
+                        run("touch sdata_rq_default_stderr.log")
+                        run("touch sdata_rq_default_stdout.log")
+                        run("touch sdata_rq_high_stderr.log")
+                        run("touch sdata_rq_high_stdout.log")
+                        run("touch sdata_rq_low_stderr.log")
+                        run("touch sdata_rq_low_stdout.log")
+                        run("touch sdata_rq_add_spider_stderr.log")
+                        run("touch sdata_rq_add_spider_stdout.log")
+                        run("touch sdata_rq_spider_pipeline_stderr.log")
+                        run("touch sdata_rq_spider_pipeline_stdout.log")
+                        run("touch sdata_rq_scheduler_stderr.log")
+                        run("touch sdata_rq_scheduler_stdout.log")
+                        run("touch sdata_rq_spider_status_stderr.log")
+                        run("touch sdata_rq_spider_status_stdout.log")
+                        run("touch sdata_rq_worker_number_control_stderr.log")
+                        run("touch sdata_rq_worker_number_control_stdout.log")
+                        run("touch sdata_rq_proxy_valid_stderr.log")
+                        run("touch sdata_rq_proxy_valid_stdout.log")
                     run("mkdir -p scrapy")
-                    run("mkdir -p python")
+                    with cd("scrapy"):
+                        run("touch sdata_scrapyd_stderr.log")
+                        run("touch sdata_scrapyd_stdout.log")
+                run("mkdir -p python")
                 with cd("python"):
                     run("mkdir -p python3_env")
                     with cd("python3_env"):
-                        run("pyenv shell 3.6.3")
-                        run("virtualenv SDATA")
-                        run("pyenv shell --unset")
+                        run("virtualenv SDATA --python=/root/.pyenv/versions/3.6.3/bin/python3.6")
 
 
 @parallel

@@ -102,24 +102,49 @@ def update_nginx():
 
 # other
 def prepare_file():
-    with lcd("/home"):
+    with lcd("/home/wqh/wangqihui/work"):
         local("mkdir -p wangqihui.me")
-        with lcd("wanqihui.me"):
-            local("mkdir -p wanqihui")
-            with lcd("wanqihui"):
+        with lcd("wangqihui.me"):
+            local("mkdir -p wangqihui")
+            with lcd("wangqihui"):
                 local("git clone " + git_repository)
                 local("mkdir -p SDATA_LOG")
                 with lcd("SDATA_LOG"):
                     local("mkdir -p gunicorn")
+                    with lcd("gunicorn"):
+                        local("touch sdata_gunicorn_stderr.log")
+                        local("touch sdata_gunicorn_stdout.log")
                     local("mkdir -p rq")
+                    with lcd("rq"):
+                        local("touch sdata_rq_rqscheduler_stderr.log")
+                        local("touch sdata_rq_rqscheduler_stdout.log")
+                        local("touch sdata_rq_default_stderr.log")
+                        local("touch sdata_rq_default_stdout.log")
+                        local("touch sdata_rq_high_stderr.log")
+                        local("touch sdata_rq_high_stdout.log")
+                        local("touch sdata_rq_low_stderr.log")
+                        local("touch sdata_rq_low_stdout.log")
+                        local("touch sdata_rq_add_spider_stderr.log")
+                        local("touch sdata_rq_add_spider_stdout.log")
+                        local("touch sdata_rq_spider_pipeline_stderr.log")
+                        local("touch sdata_rq_spider_pipeline_stdout.log")
+                        local("touch sdata_rq_scheduler_stderr.log")
+                        local("touch sdata_rq_scheduler_stdout.log")
+                        local("touch sdata_rq_spider_status_stderr.log")
+                        local("touch sdata_rq_spider_status_stdout.log")
+                        local("touch sdata_rq_worker_number_control_stderr.log")
+                        local("touch sdata_rq_worker_number_control_stdout.log")
+                        local("touch sdata_rq_proxy_valid_stderr.log")
+                        local("touch sdata_rq_proxy_valid_stdout.log")
                     local("mkdir -p scrapy")
+                    with lcd("scrapy"):
+                        local("touch sdata_scrapyd_stderr.log")
+                        local("touch sdata_scrapyd_stdout.log")
                 local("mkdir -p python")
                 with lcd("python"):
                     local("mkdir -p python3_env")
                     with lcd("python3_env"):
-                        local("pyenv shell 3.6.3")
-                        local("virtualenv SDATA")
-                        local("pyenv shell --unset")
+                        local("virtualenv SDATA --python=/home/wqh/.pyenv/versions/3.6.3/bin/python3.6")
 
 
 def prepare_os():

@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import datetime
+import pytz
 from django.db import migrations, models
 
 
@@ -16,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='proxy',
             name='invalid_time',
-            field=models.DateTimeField(default=datetime.datetime(9999, 12, 31, 23, 59, 59, 999999)),
+            field=models.DateTimeField(default=datetime.datetime(2099, 12, 31, 23, 59, 59, 999999, tzinfo=pytz.UTC)),
         ),
         migrations.AlterField(
             model_name='proxy',
