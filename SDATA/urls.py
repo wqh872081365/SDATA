@@ -22,3 +22,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^django-rq/', include('django_rq.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler403 = 'SDATA.views.handler403'
+handler404 = 'SDATA.views.handler404'
+handler500 = 'SDATA.views.handler500'

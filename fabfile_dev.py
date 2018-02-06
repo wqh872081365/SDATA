@@ -92,7 +92,7 @@ def update_supervisor():
     local("sudo supervisorctl reload")
 
 def update_settings():
-    # local("sudo cp -f " + code_path + "/deploy/local_settings_aliyun.py " + code_path + "/SDATA/local_settings.py")
+    local("sudo cp -f " + code_path + "/deploy/local_settings_aliyun.py " + code_path + "/SDATA/local_settings.py")
     local("sudo supervisorctl restart sdata_gunicorn")
 
 def update_nginx():
