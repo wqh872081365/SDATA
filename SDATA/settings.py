@@ -125,6 +125,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 SPIDER_TIMEOUT = 10
