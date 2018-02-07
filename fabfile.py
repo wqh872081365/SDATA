@@ -48,7 +48,7 @@ def start_sdata():
 @roles('apps')
 def stop_sdata():
     sudo("supervisorctl stop sdata_gunicorn")
-    sudo("cp -f " + code_path + "/templates/maintenance.html " + code_path + "/maintenance.html")
+    sudo("cp -f " + code_path + "/deploy/nginx/maintenance.html " + code_path + "/maintenance.html")
 
 @roles('job')
 def update_user_logs(user_log_id):

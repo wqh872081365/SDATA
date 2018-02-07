@@ -31,7 +31,7 @@ def start_sdata():
 
 def stop_sdata():
     local("sudo supervisorctl stop sdata_gunicorn")
-    local("sudo cp -f " + code_path + "/templates/maintenance.html " + code_path + "/maintenance.html")
+    local("sudo cp -f " + code_path + "/deploy/nginx/maintenance.html " + code_path + "/maintenance.html")
 
 def update_user_logs(user_log_id):
     local(env_path + "/bin/python3.6 " + code_path + "/manage.py " + "update_user_logs " + user_log_id)
