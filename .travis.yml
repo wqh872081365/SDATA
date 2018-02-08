@@ -12,6 +12,6 @@ before_script:
   - psql -c "create database sdata;" -U postgres
 script:
   - python manage.py test
-after_success:
   - coverage run manage.py test
+after_success:
   - codecov
