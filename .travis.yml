@@ -14,3 +14,4 @@ script:
   - python manage.py test
 after_succes:
   - coverage run manage.py test
+  - codecov
