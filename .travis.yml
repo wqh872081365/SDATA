@@ -9,7 +9,7 @@ addons:
 install:
   - pip install -r requirements.txt
 before_script:
-  - psql -c 'create database sdata;' -U postgres
-  - psql -c 'create user sdata with password "sdata";'; -U postgres
+  - psql -c "create database sdata;" -U postgres
+  - psql -c "create user sdata with password 'sdata';" -U postgres
 script:
   - python manage.py test
