@@ -9,7 +9,8 @@ addons:
 install:
   - pip install -r requirements.txt
 before_script:
-  - psql -c "create user sdata with createdb password 'sdata';"
+  - psql -c "create user sdata with createuser password 'sdata';"
+  - psql -c "alter user sdata createdb;"
   - psql -c "create database sdata;" -U sdata
 script:
   - python manage.py test
