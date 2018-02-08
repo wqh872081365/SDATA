@@ -92,7 +92,7 @@ DATABASES = {
         'USER': 'sdata',
         'PASSWORD': 'sdata',
         'HOST': 'localhost',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 
