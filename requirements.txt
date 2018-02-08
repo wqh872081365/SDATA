@@ -16,3 +16,4 @@ gunicorn==19.7.1
 greenlet==0.4.12
 gevent==1.2.2
 flake8==3.5.0
+coverage==4.5

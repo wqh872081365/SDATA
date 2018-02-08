@@ -10,6 +10,5 @@ install:
   - pip install -r requirements.txt
 before_script:
   - psql -c "create database sdata;" -U postgres
-  - flake8
 script:
   - python manage.py test
