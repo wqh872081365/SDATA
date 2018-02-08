@@ -15,4 +15,3 @@ rq_scheduler==0.7.0
 gunicorn==19.7.1
 greenlet==0.4.12
 gevent==1.2.2
-tox==2.9.1
