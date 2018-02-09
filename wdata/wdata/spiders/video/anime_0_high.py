@@ -46,7 +46,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
         self.page = page
         self.old_user_log_id = old_user_log_id
         self.season_id_list = season_id_list
-        user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+        user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                discription=[])
         self.user_log_id = user_log.id
 
     def start_requests(self):
@@ -59,7 +60,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
             except Exception as e:
                 print(e)
                 self.log(e, logging.ERROR)
-                user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+                user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                        discription=[])
                 self.user_log_id = user_log.id
             try:
                 if self.type == "1":
@@ -82,7 +84,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                     self.log("%s %s" % (len(discription), discription), logging.INFO)
                     for season_id in discription:
                         try:
-                            yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
+                            yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse,
+                                                 headers=HEADERS)
                         except Exception as e:
                             print(e)
                             self.log(e, logging.ERROR)
@@ -107,7 +110,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             self.log(e, logging.ERROR)
-            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                    discription=[])
             self.user_log_id = user_log.id
         try:
             if response.status == 200:
@@ -117,7 +121,9 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                     if result:
                         season_list = result.get("list", [])
                         if season_list:
-                            discription = [int(season.get("season_id")) for season in season_list if season.get("season_id")]
+                            discription = [
+                                int(season.get("season_id")) for season in season_list if season.get("season_id")
+                            ]
                             if discription:
                                 user_log.count = len(discription)
                                 user_log.logs["discription"] = discription
@@ -131,7 +137,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                                 self.log("%s %s" % (len(season_list), discription), logging.INFO)
                                 for season_id in discription:
                                     try:
-                                        yield scrapy.Request(url=season_url % (season_id,), callback=self.season_parse, headers=HEADERS)
+                                        yield scrapy.Request(url=season_url % (season_id,),
+                                                             callback=self.season_parse, headers=HEADERS)
                                     except Exception as e:
                                         print(e)
                                         self.log(e, logging.ERROR)
@@ -155,7 +162,8 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
             else:
                 print("response status %s" % (response.status,))
                 self.log("response status %s" % (response.status,), logging.WARNING)
-                # user_log = add_msg(user_log=user_log, msg="response status %s" % (response.status,), response=response)
+                # user_log = add_msg(user_log=user_log, msg="response status %s" % (response.status,),
+                #                    response=response)
         except Exception as e:
             print(e)
             self.log(e, logging.ERROR)
@@ -182,7 +190,10 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                             status = True
                             if not season_id:
                                 season_id = source_id
-                            detail = {"data": result, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": self.user_log_id}
+                            detail = {
+                                "data": result,
+                                "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT),
+                                "user_log_id": self.user_log_id}
                             season = BilibiliSeasonItem()
                             season["season_id"] = int(season_id)
                             season["season_name"] = season_name
@@ -198,19 +209,25 @@ class BilibiliSeasonHighSpider(scrapy.Spider):
                         else:
                             print("result is null")
                             self.log("result is null", logging.WARNING)
-                            # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="3", msg="result is null", response=response)
+                            # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id,
+                            #                url=response.url, status="3", msg="result is null", response=response)
                     else:
                         print("response body is not verify")
                         self.log("response body is not verify", logging.WARNING)
-                        # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="2", msg="response body is not verify", response=response)
+                        # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id,
+                        #                url=response.url, status="2", msg="response body is not verify",
+                        #                response=response)
                 else:
                     print("response status %s" % (response.status,))
                     self.log("response status %s" % (response.status,), logging.WARNING)
-                    # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="0", msg="response status %s" % (response.status,), response=response)
+                    # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id,
+                    #                url=response.url, status="0", msg="response status %s" % (response.status,),
+                    #                response=response)
             except Exception as e:
                 print(e)
                 self.log(e, logging.ERROR)
-                # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url, status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
+                # add_spider_log(user_log_id=self.user_log_id, source=LOG_TYPE, source_id=source_id, url=response.url,
+                #                status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
             finally:
                 pass
         else:

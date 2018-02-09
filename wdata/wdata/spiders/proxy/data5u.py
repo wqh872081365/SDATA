@@ -57,7 +57,9 @@ class Data5uSpider(scrapy.Spider):
             "http://www.data5u.com/free/isp/移动/index.html",
             # ......
 
-        ] + ["http://www.data5u.com/free/area/%s/index.html" % (area,) for area in ["广东省", "陕西省", "河南省", "江西省", "广西", "上海市", "安徽省", "河北省", "江苏省", "四川省", "福建省", "湖南省", "浙江省", "山东省", "北京市", "湖北省"]]
+        ] + ["http://www.data5u.com/free/area/%s/index.html" % (area,) for area in [
+            "广东省", "陕西省", "河南省", "江西省", "广西", "上海市", "安徽省", "河北省", "江苏省", "四川省", "福建省",
+            "湖南省", "浙江省", "山东省", "北京市", "湖北省"]]
         headers = {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
@@ -90,7 +92,8 @@ class Data5uSpider(scrapy.Spider):
             if ip and port:
                 try:
                     ip = ip[0].strip()
-                    port = int("".join([str("ABCDEFGHIZ".index(_port)) for _port in port[0].strip().split(" ")[1]])) >> 3
+                    port = int(
+                        "".join([str("ABCDEFGHIZ".index(_port)) for _port in port[0].strip().split(" ")[1]])) >> 3
                     anonymity = [_anonymity.strip() for _anonymity in anonymity]
                     country = [_country.strip() for _country in country]
                     http_tem = [_http.strip() for _http in http]
@@ -102,7 +105,8 @@ class Data5uSpider(scrapy.Spider):
                             http += [_http]
                     for index, _http in enumerate(http):
                         if " " in _http:
-                            http[index] = "".join([_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
+                            http[index] = "".join(
+                                [_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
                     city = [_city.strip() for _city in city]
                     isp = [_isp.strip() for _isp in isp]
                     delay = [_delay.strip() for _delay in delay]

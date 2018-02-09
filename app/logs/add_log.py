@@ -64,7 +64,7 @@ def add_msg(user_log, msg, response, type="fg_msg", source="spider"):
         if user_log.logs.get(type) and isinstance(user_log.logs[type], (tuple, list)):
             user_log.logs[type].append(log)
         else:
-            user_log.logs[type] = [log,]
+            user_log.logs[type] = [log]
     return user_log
 
 
@@ -92,7 +92,10 @@ def update_user_log(user_log_id):
             if find_user_log_in_season(user_log_id, season_id):
                 success_detail.append(season_id)
         user_log.success = len(success_detail)
-        user_log.success_detail = {"success": success_detail, "update_time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)}
+        user_log.success_detail = {
+            "success": success_detail,
+            "update_time": timezone.localtime(timezone.now()).strftime(settings.LOG_DATE_FORMAT)
+        }
         if len(success_detail) == len(discription):
             user_log.success_detail["complete"] = True
         user_log.save(update_fields=['success', 'status', 'success_detail'])
@@ -117,7 +120,7 @@ def update_user_logs(user_log_id=""):
             user_log_one = UserLog.objects.get(id=int(user_log_id))
             project_one = user_log_one.logs.get("project", "")
             if project_one:
-                project_list = [project_one,]
+                project_list = [project_one]
             else:
                 user_log_one = None
                 projects_result = list_projects()
@@ -132,8 +135,8 @@ def update_user_logs(user_log_id=""):
             for project in project_list:
                 jobs_result = list_jobs(project)
                 print("project %s jobs: " % (project,), jobs_result)
-                pending_job_list = jobs_result.get("pending", [])
-                running_job_list = jobs_result.get("running", [])
+                # pending_job_list = jobs_result.get("pending", [])
+                # running_job_list = jobs_result.get("running", [])
                 finished_job_list = jobs_result.get("finished", [])
                 finished_job_list.sort(key=lambda x: x["end_time"], reverse=True)
                 print("finished_job_list: ", finished_job_list[:100])
@@ -147,7 +150,8 @@ def update_user_logs(user_log_id=""):
                         job_id = user_log.logs.get("job_id", "")
                         if finished_id_dict.get(job_id, "") == "finished":
                             update_user_log(user_log.id)
-                            print("user_log_id %s job_id %s status %s finished ok" % (user_log.id, job_id, user_log.status))
+                            print("user_log_id %s job_id %s status %s finished ok" % (user_log.id, job_id,
+                                                                                      user_log.status))
                 else:
                     print("list jobs is failed")
         else:
@@ -171,7 +175,8 @@ def count_not_finish_user_logs():
             print("pending_job_count %s, running_job_count %s." % (pending_job_count, running_job_count))
             return
         if finishing_job_count > 100:
-            print("user log all finish and scrapyd hava no job, finish job count %s, you can clean job by restart scrapyd service." % (finishing_job_count,))
+            print("user log all finish and scrapyd hava no job, finish job count %s, "
+                  "you can clean job by restart scrapyd service." % (finishing_job_count,))
             return
         else:
             print("user log all finish and scrapyd hava no job.")

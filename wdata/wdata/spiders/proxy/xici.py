@@ -81,7 +81,8 @@ class XiCiSpider(scrapy.Spider):
                             http += [_http]
                     for index, _http in enumerate(http):
                         if " " in _http:
-                            http[index] = "".join([_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
+                            http[index] = "".join(
+                                [_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
                     city = [_city.strip() for _city in city]
                     delay = [_delay.strip() for _delay in delay]
                     verify_time = [_verify_time.strip() for _verify_time in verify_time]

@@ -22,7 +22,10 @@ class Command(BaseCommand):
         success_https = 0
         # for proxy in proxy_http:
         #     try:
-        #         r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=5)
+        #         r = requests.get(TEST_PROXY_URL.get("http"),
+        #                          proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)},
+        #                          headers={"User-Agent": random.choice(USER_AGENT_LIST)},
+        #                          timeout=5)
         #         time.sleep(1)
         #         if r.status_code == 200:
         #             success_http += 1
@@ -41,7 +44,10 @@ class Command(BaseCommand):
         #         continue
         for proxy in proxy_https:
             try:
-                r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=settings.SPIDER_TIMEOUT)
+                r = requests.get(TEST_PROXY_URL.get("https"),
+                                 proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)},
+                                 headers={"User-Agent": random.choice(USER_AGENT_LIST)},
+                                 timeout=settings.SPIDER_TIMEOUT)
                 time.sleep(5)
                 if r.status_code == 200:
                     success_https += 1

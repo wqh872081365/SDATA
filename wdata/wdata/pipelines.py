@@ -42,7 +42,9 @@ class PostgresPipeline(object):
                 else:
                     country = item["country"][:100]
                     source = item["detail"].get("source", "")
-                    Proxy.objects.create(ip=ip, port=port, source=source, anonymity=item["anonymity"], country=country, http=item["http"], status="2", detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
+                    Proxy.objects.create(ip=ip, port=port, source=source, anonymity=item["anonymity"],
+                                         country=country, http=item["http"], status="2",
+                                         detail={"details": [item["detail"]]}, success_count=0, failure_count=0)
             except Exception as e:
                 print(e)
                 spider.log(e, logging.ERROR)
@@ -55,12 +57,22 @@ class PostgresPipeline(object):
                         season = BilibiliSeason.objects.get(season_id=season_id)
                         season.play_count = item["play_count"]
                         # season.detail["details"].append(item["detail"])
-                        season.detail["details"].append({"data": {"coins": item["detail"].get("data", {}).get("coins", ""), "favorites": item["detail"].get("data", {}).get("favorites", ""), "play_count": item["detail"].get("data", {}).get("play_count", ""), "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")}, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": user_log_id})
+                        season.detail["details"].append({"data": {
+                            "coins": item["detail"].get("data", {}).get("coins", ""),
+                            "favorites": item["detail"].get("data", {}).get("favorites", ""),
+                            "play_count": item["detail"].get("data", {}).get("play_count", ""),
+                            "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")},
+                            "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT),
+                            "user_log_id": user_log_id
+                        })
                         season.save()
                     else:
                         season_name = item["season_name"][:100]
                         bangumi_name = item["bangumi_name"][:100]
-                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
+                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name,
+                                                      bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name,
+                                                      season_url=item["season_url"], play_count=item["play_count"],
+                                                      status=item["status"], detail={"details": [item["detail"]]})
                 except Exception as e:
                     print(e)
                     spider.log(e, logging.ERROR)
@@ -78,13 +90,24 @@ class PostgresPipeline(object):
                         season = BilibiliSeason.objects.get(season_id=season_id)
                         season.play_count = item["play_count"]
                         # season.detail["details"].append(item["detail"])
-                        season.detail["details"].append({"data": {"coins": item["detail"].get("data", {}).get("coins", ""), "favorites": item["detail"].get("data", {}).get("favorites", ""), "play_count": item["detail"].get("data", {}).get("play_count", ""), "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")}, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": user_log.id})
+                        season.detail["details"].append({"data": {
+                            "coins": item["detail"].get("data", {}).get("coins", ""),
+                            "favorites": item["detail"].get("data", {}).get("favorites", ""),
+                            "play_count": item["detail"].get("data", {}).get("play_count", ""),
+                            "danmaku_count": item["detail"].get("data", {}).get("danmaku_count", "")},
+                            "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT),
+                            "user_log_id": user_log.id
+                        })
                         season.save()
                     else:
                         season_name = item["season_name"][:100]
                         bangumi_name = item["bangumi_name"][:100]
-                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name, bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name, season_url=item["season_url"], play_count=item["play_count"], status=item["status"], detail={"details": [item["detail"]]})
-                    if user_log.success_detail.get("success") and isinstance(user_log.success_detail["success"], (tuple, list)):
+                        BilibiliSeason.objects.create(season_id=season_id, season_name=season_name,
+                                                      bangumi_id=item["bangumi_id"], bangumi_name=bangumi_name,
+                                                      season_url=item["season_url"], play_count=item["play_count"],
+                                                      status=item["status"], detail={"details": [item["detail"]]})
+                    if (user_log.success_detail.get("success") and
+                            isinstance(user_log.success_detail["success"], (tuple, list))):
                         user_log.success_detail["success"].append(season_id)
                     else:
                         user_log.success_detail["success"] = [season_id, ]
@@ -98,7 +121,8 @@ class PostgresPipeline(object):
                 except Exception as e:
                     print(e)
                     spider.log(e, logging.ERROR)
-                    user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(), type="bg_msg", source="pipeline")
+                    user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=item.items(),
+                                       type="bg_msg", source="pipeline")
                 finally:
                     user_log.save(update_fields=['success_detail', 'success'])
         return item

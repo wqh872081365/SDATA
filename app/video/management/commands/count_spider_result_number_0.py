@@ -23,8 +23,10 @@ import pytz
 #                 end_time = user_log.logs.get("end_time", "")
 #                 result_list = user_log.logs.get("discription", [])
 #                 if start_time and end_time:
-#                     start_time = timezone.datetime.strptime(start_time, settings.LOG_DATE_FORMAT).replace(tzinfo=pytz.UTC)
-#                     end_time = timezone.datetime.strptime(end_time, settings.LOG_DATE_FORMAT).replace(tzinfo=pytz.UTC)
+#                     start_time = timezone.datetime.strptime(start_time, settings.LOG_DATE_FORMAT).replace(
+#                         tzinfo=pytz.UTC)
+#                     end_time = timezone.datetime.strptime(end_time, settings.LOG_DATE_FORMAT).replace(
+#                         tzinfo=pytz.UTC)
 #                     failed_list = []
 #                     for result in result_list:
 #                         if not self.get_result(result, start_time, end_time):

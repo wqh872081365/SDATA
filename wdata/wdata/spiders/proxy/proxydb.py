@@ -44,7 +44,8 @@ class ProxydbSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            "http://proxydb.net/?protocol=https&anonlvl=4&min_uptime=75&max_response_time=5&exclude_gateway=1&country=CN&offset=0",
+            "http://proxydb.net/?protocol=https&anonlvl=4&min_uptime=75&max_response_time=5&exclude_gateway=1"
+            "&country=CN&offset=0",
         ]
 
         for url in urls:
@@ -54,11 +55,14 @@ class ProxydbSpider(scrapy.Spider):
         sel_list = response.xpath("/html/body/div/div/table/tbody//tr")
         for sel in sel_list:
             script_str = sel.xpath("td[1]/script/text()").extract()[0]
-            script_str_sub_list= script_str.split(";")
+            script_str_sub_list = script_str.split(";")
             if len(script_str_sub_list) > 3:
-                _d, _var, script_str_ip_1 = re.match(r"(.|\n)*var (\w*) = '([\d\.]*)'\.split\(''\)\.reverse\(\)\.join\(''\)", script_str_sub_list[0]).groups()
+                _d, _var, script_str_ip_1 = re.match(
+                    r"(.|\n)*var (\w*) = '([\d\.]*)'\.split\(''\)\.reverse\(\)\.join\(''\)", script_str_sub_list[0]
+                ).groups()
                 script_str_ip_1 = script_str_ip_1[::-1]
-                _d, _var, script_str_ip_2 = re.match(r"(.|\n)*var (\w*) = atob\('([A-Fa-fx0-9\\]*)'\.replace", script_str_sub_list[1]).groups()
+                _d, _var, script_str_ip_2 = re.match(
+                    r"(.|\n)*var (\w*) = atob\('([A-Fa-fx0-9\\]*)'\.replace", script_str_sub_list[1]).groups()
                 script_str_ip_2 = "".join(chr(int(data, 16)) for data in script_str_ip_2.split(r"\x")[1:])
                 script_str_ip_2 = base64.b64decode(script_str_ip_2).decode("utf-8")
                 ip = script_str_ip_1 + script_str_ip_2
@@ -88,7 +92,8 @@ class ProxydbSpider(scrapy.Spider):
                                 http += [_http]
                         for index, _http in enumerate(http):
                             if " " in _http:
-                                http[index] = "".join([_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
+                                http[index] = "".join(
+                                    [_http_sub.strip() for _http_sub in _http.split(" ") if _http_sub.strip()])
                         isp = [_isp.strip() for _isp in isp]
                         delay = [_delay.strip() for _delay in delay]
                         verify_time = [_verify_time.strip() for _verify_time in verify_time]
@@ -128,7 +133,8 @@ class ProxydbSpider(scrapy.Spider):
         if sel_list:
             try:
                 offset = re.match(r'^.*offset=(\d*)$', response.url).groups()[0]
-                base_url = "http://proxydb.net/?protocol=https&anonlvl=4&min_uptime=75&max_response_time=5&exclude_gateway=1&country=CN&offset="
+                base_url = ("http://proxydb.net/?protocol=https&anonlvl=4&min_uptime=75&max_response_time=5"
+                            "&exclude_gateway=1&country=CN&offset=")
                 if int(offset) < 100:
                     url = "%s%s" % (base_url, int(offset) + 15)
                     yield scrapy.Request(url=url, callback=self.parse, headers=HEADERS)

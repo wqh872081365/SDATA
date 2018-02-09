@@ -7,4 +7,5 @@ from app.video.models import *
 class BilibiliSeasonAdmin(admin.ModelAdmin):
     pass
 
+
 admin.site.register(BilibiliSeason, BilibiliSeasonAdmin)

@@ -57,7 +57,7 @@ def add_schedule(project, spider, jobid="", schedule_url=SCHEDULE_URL, **kwargs)
     if not jobid:
         jobid = uuid.uuid1().hex
     kwargs["project"] = project
-    kwargs["spider"]= spider
+    kwargs["spider"] = spider
     kwargs["jobid"] = jobid
     r_add_schedule = requests.post(schedule_url, data=kwargs)
     return json.loads(r_add_schedule.text)
@@ -137,7 +137,10 @@ if __name__ == "__main__":
     # print(add_schedule("wdata", "proxydb", job_id))
     # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"job_id": job_id}))
     # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"page": "1", "job_id": job_id}))
-    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
-    # print(add_schedule("wdata", "BilibiliSeason", job_id, **{"type": "1", "old_user_log_id": "46", "job_id": job_id}))
-    # print(add_schedule("wdata", "BilibiliSeasonHigh", job_id, **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id,
+    #                    **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeason", job_id,
+    #                    **{"type": "1", "old_user_log_id": "46", "job_id": job_id}))
+    # print(add_schedule("wdata", "BilibiliSeasonHigh", job_id,
+    #                    **{"type": "2", "season_id_list": "21603", "job_id": job_id}))
     pass

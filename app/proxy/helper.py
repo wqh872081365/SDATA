@@ -14,7 +14,8 @@ TEST_PROXY_URL = {
 }
 
 USER_AGENT_LIST = [
-    "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/63.0.3239.84 Safari/537.36",
     "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
 ]
 
@@ -32,7 +33,9 @@ def get_random_proxy(**kwargs):
 #     success_https = 0
 #     for proxy in proxy_http:
 #         try:
-#             r = requests.get(TEST_PROXY_URL.get("http"), proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+#             r = requests.get(TEST_PROXY_URL.get("http"),
+#                              proxies={"http": "%s://%s:%s" % ("http", proxy.ip, proxy.port)},
+#                              headers={"User-Agent": random.choice(USER_AGENT_LIST)})
 #             time.sleep(1)
 #             if r.status_code == 200:
 #                 success_http += 1
@@ -49,7 +52,9 @@ def get_random_proxy(**kwargs):
 #             continue
 #     for proxy in proxy_https:
 #         try:
-#             r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)})
+#             r = requests.get(TEST_PROXY_URL.get("https"),
+#                              proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)},
+#                              headers={"User-Agent": random.choice(USER_AGENT_LIST)})
 #             time.sleep(1)
 #             if r.status_code == 200:
 #                 success_https += 1
@@ -64,7 +69,10 @@ def get_random_proxy(**kwargs):
 #             proxy.status = "0"
 #             proxy.save()
 #             continue
-#     return {"http_count": proxy_http.count(), "success_http": success_http, "https_count": proxy_https.count(), "success_https" : success_http}
+#     return {"http_count": proxy_http.count(),
+#             "success_http": success_http,
+#             "https_count": proxy_https.count(),
+#             "success_https" : success_http}
 
 
 def set_vaild_proxy():
@@ -72,7 +80,10 @@ def set_vaild_proxy():
     success_https = 0
     for proxy in proxy_https:
         try:
-            r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=settings.SPIDER_TIMEOUT)
+            r = requests.get(TEST_PROXY_URL.get("https"),
+                             proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)},
+                             headers={"User-Agent": random.choice(USER_AGENT_LIST)},
+                             timeout=settings.SPIDER_TIMEOUT)
             if r.status_code == 200:
                 success_https += 1
                 proxy.status = "1"
@@ -98,7 +109,10 @@ def set_invaild_proxy():
         status_dict = {"success": 0, "failed": 0}
         for i in range(TEST_REPEAT_TIME):
             try:
-                r = requests.get(TEST_PROXY_URL.get("https"), proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)}, headers={"User-Agent": random.choice(USER_AGENT_LIST)}, timeout=settings.SPIDER_TIMEOUT)
+                r = requests.get(TEST_PROXY_URL.get("https"),
+                                 proxies={"https": "%s://%s:%s" % ("https", proxy.ip, proxy.port)},
+                                 headers={"User-Agent": random.choice(USER_AGENT_LIST)},
+                                 timeout=settings.SPIDER_TIMEOUT)
                 if r.status_code == 200:
                     status_dict["success"] += 1
                 else:

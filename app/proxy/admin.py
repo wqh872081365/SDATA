@@ -7,4 +7,5 @@ from app.proxy.models import *
 class ProxyAdmin(admin.ModelAdmin):
     pass
 
+
 admin.site.register(Proxy, ProxyAdmin)

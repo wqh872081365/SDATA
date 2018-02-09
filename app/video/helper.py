@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from app.logs.models import UserLog
 
+
 def list_spider_result():
     pass
+
 
 def list_spider_failed(user_log_id, log_type):
     try:

@@ -46,7 +46,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
         self.page = page
         self.old_user_log_id = old_user_log_id
         self.season_id_list = season_id_list
-        user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+        user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                discription=[])
         self.user_log_id = user_log.id
 
     def start_requests(self):
@@ -59,7 +60,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
             except Exception as e:
                 print(e)
                 self.log(e, logging.ERROR)
-                user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+                user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                        discription=[])
                 self.user_log_id = user_log.id
             try:
                 if self.type == "1":
@@ -79,7 +81,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
                     user_log.status = "1"
                     print(len(discription), discription)
                     self.log("%s %s" % (len(discription), discription), logging.INFO)
-                    yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
+                    yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse,
+                                         headers=HEADERS)
                 else:
                     user_log = add_msg(user_log=user_log, msg="no failed list", response="")
             except Exception as e:
@@ -101,7 +104,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             self.log(e, logging.ERROR)
-            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                    discription=[])
             self.user_log_id = user_log.id
         try:
             if response.status == 200:
@@ -111,7 +115,9 @@ class BilibiliSeasonSpider(scrapy.Spider):
                     if result:
                         season_list = result.get("list", [])
                         if season_list:
-                            discription = [int(season.get("season_id")) for season in season_list if season.get("season_id")]
+                            discription = [
+                                int(season.get("season_id")) for season in season_list if season.get("season_id")
+                            ]
                             if discription:
                                 user_log.count = len(discription)
                                 user_log.logs["discription"] = discription
@@ -123,7 +129,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 print(len(season_list), discription)
                                 self.log("%s %s" % (len(season_list), discription), logging.INFO)
                                 # for season_id in discription:
-                                yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse, headers=HEADERS)
+                                yield scrapy.Request(url=season_url % (discription[0],), callback=self.season_parse,
+                                                     headers=HEADERS)
                             else:
                                 user_log = add_msg(user_log=user_log, msg="no season_id", response=response)
                         else:
@@ -147,7 +154,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             self.log(e, logging.ERROR)
-            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0, discription=[])
+            user_log = add_user_log(project="wdata", spider=self.name, job_id=self.job_id, type=LOG_TYPE, count=0,
+                                    discription=[])
             self.user_log_id = user_log.id
         try:
             if response.status == 200:
@@ -197,7 +205,9 @@ class BilibiliSeasonSpider(scrapy.Spider):
                     if result:
                         season_list = result.get("list", [])
                         if season_list:
-                            discription = [int(season.get("season_id")) for season in season_list if season.get("season_id")]
+                            discription = [
+                                int(season.get("season_id")) for season in season_list if season.get("season_id")
+                            ]
                             if discription:
                                 if user_log.logs["discription"]:
                                     user_log.logs["discription"] += discription
@@ -209,7 +219,8 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 self.log("%s %s" % (len(season_list), discription), logging.INFO)
                                 # for season_id in discription:
                                 new_season_id = user_log.logs["undone"].pop(0)
-                                yield scrapy.Request(url=season_url % (new_season_id,), callback=self.season_parse, headers=HEADERS)
+                                yield scrapy.Request(url=season_url % (new_season_id,), callback=self.season_parse,
+                                                     headers=HEADERS)
                             else:
                                 user_log = add_msg(user_log=user_log, msg="no season_id", response=response)
                         else:
@@ -225,7 +236,7 @@ class BilibiliSeasonSpider(scrapy.Spider):
             self.log(e, logging.ERROR)
             user_log = add_msg(user_log=user_log, msg=traceback.format_exc(), response=response, type="bg_msg")
         finally:
-            user_log.save(update_fields=['logs',])
+            user_log.save(update_fields=['logs'])
 
     def season_parse(self, response):
         season_url_next = SEASON_URL
@@ -251,7 +262,11 @@ class BilibiliSeasonSpider(scrapy.Spider):
                             status = True
                             if not season_id:
                                 season_id = source_id
-                            detail = {"data": result, "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT), "user_log_id": user_log.id}
+                            detail = {
+                                "data": result,
+                                "time": timezone.localtime(timezone.now()).strftime(sdata_settings.LOG_DATE_FORMAT),
+                                "user_log_id": user_log.id
+                            }
                             season = BilibiliSeasonItem()
                             season["season_id"] = int(season_id)
                             season["season_name"] = season_name
@@ -268,28 +283,35 @@ class BilibiliSeasonSpider(scrapy.Spider):
                                 season["complete"] = False
                                 yield season
                                 new_season_id = user_log.logs["undone"].pop(0)
-                                yield scrapy.Request(url=season_url_next % (new_season_id,), callback=self.season_parse, headers=HEADERS)
+                                yield scrapy.Request(url=season_url_next % (new_season_id,),
+                                                     callback=self.season_parse, headers=HEADERS)
                             else:
                                 if user_log.logs["cur_page"] < user_log.logs["pages"]:
                                     season["complete"] = False
                                     yield season
                                     user_log.logs["cur_page"] += 1
-                                    url = "%(base_url)s?page=%(page)s" % {"base_url": BASE_URL, "page": user_log.logs["cur_page"]}
+                                    url = "%(base_url)s?page=%(page)s" % {"base_url": BASE_URL,
+                                                                          "page": user_log.logs["cur_page"]}
                                     yield scrapy.Request(url=url, callback=self.sub_parse, headers=HEADERS)
                                 else:
                                     season["complete"] = True
                                     user_log.status = "2"
                                     yield season
                         else:
-                            add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="3", msg="result is null", response=response)
+                            add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id,
+                                           url=response.url, status="3", msg="result is null", response=response)
                     else:
-                        add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="2", msg="response body is not verify", response=response)
+                        add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id,
+                                       url=response.url, status="2", msg="response body is not verify",
+                                       response=response)
                 else:
-                    add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="0", msg="response status %s" % (response.status,), response=response)
+                    add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url,
+                                   status="0", msg="response status %s" % (response.status,), response=response)
             except Exception as e:
                 print(e)
                 self.log(e, logging.ERROR)
-                add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url, status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
+                add_spider_log(user_log_id=user_log.id, source=LOG_TYPE, source_id=source_id, url=response.url,
+                               status="4", msg=traceback.format_exc(), response=response, type="bg_msg")
             finally:
                 user_log.save(update_fields=['status', 'logs'])
         else:
